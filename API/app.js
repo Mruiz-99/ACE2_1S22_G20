@@ -9,5 +9,6 @@ app.listen(port, () => {
     console.log(`IoT API is running on port ${port}`);
 });
 
-app.get('/getTempRecords/',api.getTempRecords);
+app.get('/getTempRecords/Casa/',api.getTempRecordsCasa);
+app.get('/getTempRecords/Pozo/',api.getTempRecordsPozo);
 

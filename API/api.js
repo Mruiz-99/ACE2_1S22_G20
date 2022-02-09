@@ -1,3 +1,12 @@
+const Pool = require('pg').Pool;
+const pool = new Pool({
+    user: 'pozoapi',
+    host: 'localhost',
+    database: 'pozodb',
+    password: 'ArquiApi',
+    port: 5432
+});
+
 const fakeValue = [
     {
         id: 0,
@@ -16,10 +25,21 @@ const fakeValue = [
     }
 ];
 
-const getTempRecords = async (request, response) => {
-    response.status(200).json(fakeValue);
+const getTempRecordsCasa = async (request, response) => {
+    pool.query('SELECT * FROM Temp_Casa', (error, result) => {
+        response.status(200).json(result.rows);
+    });
 };
 
+
+const getTempRecordsPozo = async (request, response) => {
+    pool.query('SELECT * FROM Temp_Pozo', (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
+
 module.exports = {
-    getTempRecords
+    getTempRecordsCasa,
+    getTempRecordsPozo
 };

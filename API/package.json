@@ -4,12 +4,13 @@
   "description": "API IoT Pozo Provenzal",
   "main": "index.js",
   "scripts": {
-    "serve":"nodemon app.js"
+    "serve": "nodemon app.js"
   },
   "author": "Steven Jocol",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "pg": "^8.7.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
