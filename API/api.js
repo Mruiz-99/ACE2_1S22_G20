@@ -7,24 +7,6 @@ const pool = new Pool({
     port: 5432
 });
 
-const fakeValue = [
-    {
-        id: 0,
-        temp: 34.5,
-        timestamp: '12:00:34 am'
-    },
-    {
-        id: 1,
-        temp: 30.0,
-        timestamp: '12:01:34 am'
-    },
-    {
-        id: 2,
-        temp: 32.6,
-        timestamp: '12:03:34 am'
-    }
-];
-
 const getTempRecordsCasa = async (request, response) => {
     pool.query('SELECT * FROM Temp_Casa', (error, result) => {
         response.status(200).json(result.rows);
@@ -38,8 +20,69 @@ const getTempRecordsPozo = async (request, response) => {
     });
 };
 
+const addTempRecordCasa = async (request, response) => {
+    const { temp } = request.body;
+    pool.query(`INSERT INTO Temp_Casa (Temperatura) VALUES (${temp})`, (error, result) => {
+        if(error){
+            response.status(400).json('Error al registrar la nueva temperatura');
+        }else{
+            response.status(200).json(`Se inserto ${result.rowCount} valor nuevo: ${temp} °C`);
+        }        
+    });
+}
+
+const addTempRecordPozo = async (request, response) => {
+    const { temp } = request.body;
+    pool.query(`INSERT INTO Temp_Pozo (Temperatura) VALUES (${temp})`, (error, result) => {
+        if(error){
+            response.status(400).json('Error al registrar la nueva temperatura');
+        }else{
+            response.status(200).json(`Se inserto ${result.rowCount} valor nuevo: ${temp} °C`);
+        }        
+    });
+}
+
+
+const addLumenRecord = async (request, response) => {
+    const { lumens } = request.body;
+    pool.query(`INSERT INTO Luz (Nivel) VALUES (${lumens})`, (error, result) => {
+        if(error){
+            response.status(400).json('Error al registrar el nuevo nivel de lumens');
+        }else{
+            response.status(200).json(`Se inserto ${result.rowCount} valor nuevo: ${lumens} lumens`);
+        }        
+    });
+}
+
+const addCO2Record = async (request, response) => {
+    const { ppm } = request.body;
+    pool.query(`INSERT INTO CO2 (Nivel) VALUES (${ppm})`, (error, result) => {
+        if(error){
+            response.status(400).json('Error al registrar el nuevo nivel de CO2');
+        }else{
+            response.status(200).json(`Se inserto ${result.rowCount} valor nuevo: ${ppm} CO2 ppm`);
+        }        
+    });
+}
+
+
+const addHumidityRecord = async (request, response) => {
+    const { porcentaje } = request.body;
+    pool.query(`INSERT INTO Humedad (Nivel) VALUES (${porcentaje})`, (error, result) => {
+        if(error){
+            response.status(400).json('Error al registrar el nuevo nivel de CO2');
+        }else{
+            response.status(200).json(`Se inserto ${result.rowCount} valor nuevo: ${porcentaje}%`);
+        }        
+    });
+}
 
 module.exports = {
     getTempRecordsCasa,
-    getTempRecordsPozo
+    getTempRecordsPozo,
+    addTempRecordCasa,
+    addTempRecordPozo,
+    addLumenRecord,
+    addCO2Record,
+    addHumidityRecord
 };
