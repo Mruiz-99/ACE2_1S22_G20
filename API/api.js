@@ -22,6 +22,7 @@ const getTempRecordsPozo = async (request, response) => {
 
 const addTempRecordCasa = async (request, response) => {
     const { temp } = request.body;
+    console.log(`Insertando nuevo valor de Temperatura (Casa): ${temp} °C `);
     pool.query(`INSERT INTO Temp_Casa (Temperatura) VALUES (${temp})`, (error, result) => {
         if(error){
             response.status(400).json('Error al registrar la nueva temperatura');
@@ -33,6 +34,7 @@ const addTempRecordCasa = async (request, response) => {
 
 const addTempRecordPozo = async (request, response) => {
     const { temp } = request.body;
+    console.log(`Insertando nuevo valor de Temperatura (Pozo): ${temp} °C `);
     pool.query(`INSERT INTO Temp_Pozo (Temperatura) VALUES (${temp})`, (error, result) => {
         if(error){
             response.status(400).json('Error al registrar la nueva temperatura');
@@ -45,6 +47,7 @@ const addTempRecordPozo = async (request, response) => {
 
 const addLumenRecord = async (request, response) => {
     const { lumens } = request.body;
+    console.log(`Insertando nuevo valor de Iluminacion: ${lumens} lumens`);
     pool.query(`INSERT INTO Luz (Nivel) VALUES (${lumens})`, (error, result) => {
         if(error){
             response.status(400).json('Error al registrar el nuevo nivel de lumens');
@@ -56,6 +59,7 @@ const addLumenRecord = async (request, response) => {
 
 const addCO2Record = async (request, response) => {
     const { ppm } = request.body;
+    console.log(`Insertando nuevo valor de CO2: ${ppm} ppm`);
     pool.query(`INSERT INTO CO2 (Nivel) VALUES (${ppm})`, (error, result) => {
         if(error){
             response.status(400).json('Error al registrar el nuevo nivel de CO2');
@@ -68,6 +72,7 @@ const addCO2Record = async (request, response) => {
 
 const addHumidityRecord = async (request, response) => {
     const { porcentaje } = request.body;
+    console.log(`Insertando nuevo valor de Humedad: ${porcentaje} %`);
     pool.query(`INSERT INTO Humedad (Nivel) VALUES (${porcentaje})`, (error, result) => {
         if(error){
             response.status(400).json('Error al registrar el nuevo nivel de CO2');

@@ -12,12 +12,12 @@
 
 El api se conecta a una base de datos de PostgreSQL usando Express y PG<br />
 
-Pueden instalarse con el comando: <br />
+Pueden instalarse con el comando: <br/>
 ```bash 
 npm i pg y npm i express
 ```
 
-Para conectar a la base de datos se require colocar los datos correctos en el archivo api.js de la siguiente manera: <br />
+Para conectar a la base de datos se require colocar los datos correctos en el archivo api.js de la siguiente manera: <br/>
 
 ~~~javascript
 const pool = new Pool({
@@ -34,8 +34,8 @@ const pool = new Pool({
 Para interactuar con la api se pueden realizar las siguientes peticiones post/get que devolveran informacion en formato JSON
 
 ##### Agregar temperatura de la casa o el pozo: 
- **POST:** /addTempRecord/Casa/ <br />
- **POST:** /addTempRecord/Pozo/ <br />
+ **POST:** /addTempRecord/Casa/ <br/>
+ **POST:** /addTempRecord/Pozo/ <br/>
  Con el siguiente formato en el body
  ```json
  {
@@ -44,8 +44,8 @@ Para interactuar con la api se pueden realizar las siguientes peticiones post/ge
  ```
  
  ##### Agregar nivel de iluminacion: 
- **POST:** /addLumenRecord/ <br />
- Con el siguiente formato en el body <br />
+ **POST:** /addLumenRecord/ <br/>
+ Con el siguiente formato en el body <br/>
  ```json
  {
      "lumens": 234 
@@ -54,7 +54,7 @@ Para interactuar con la api se pueden realizar las siguientes peticiones post/ge
  
  ##### Agregar nivel de CO2: 
  **POST:** /addCO2Record/ <br />
- Con el siguiente formato en el body <br />
+ Con el siguiente formato en el body <br/>
  ```json
  {
      "ppm": 23.4 
@@ -62,8 +62,8 @@ Para interactuar con la api se pueden realizar las siguientes peticiones post/ge
  ```
  
  ##### Agregar nivel de CO2: 
- **POST:** /addHumidityRecord/ <br />
- Con el siguiente formato en el body <br />
+ **POST:** /addHumidityRecord/ <br/>
+ Con el siguiente formato en el body <br/>
  ```json
  {
      "porcentaje": 15 
