@@ -22,7 +22,7 @@ Donde comando puede ser:
 ```
 LUMENS: Comando para enviar dato de iluminacion
 TEMPC: Comando para datos de temperatura de la casa
-TEMPP: COmando para datos de temperatura del pozo
+TEMPP: Comando para datos de temperatura del pozo
 HUMIDITY: Comando para datos de humedad
 CO2PPM: Comando para datos de CO2 ppm
 ```
