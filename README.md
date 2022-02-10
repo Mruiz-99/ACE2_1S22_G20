@@ -7,6 +7,26 @@
  Ronald Oswaldo Macal de León      201612151<br />
  Virginia Sarai Gutierrez Depaz    201504443
 
+## NODEJS ARDUNO->API Funcionamiento
+Servidor que recibe los comandos desde el COM del arduino y parse los comandos para insertar la informacion en la DB a traves de la API
+
+La comunicacion se hace usando la libraria serialport y axios
+Pueden instalarse con el comando: <br/>
+~~~bash
+npm i serialport y npm i axios
+~~~
+
+Descripcion del protocolo de comunicacion serial: <br/>
+**[COMANDO]** **[VALOR]**
+Donde comando puede ser: 
+```
+LUMENS: Comando para enviar dato de iluminacion
+TEMPC: Comando para datos de temperatura de la casa
+TEMPP: COmando para datos de temperatura del pozo
+HUMIDITY: Comando para datos de humedad
+CO2PPM: Comando para datos de CO2 ppm
+```
+Ejemplo: **TEMPC 28.3** | **CO2PPM 234.45**
 
 ## NODEJS API Funcionamiento
 
