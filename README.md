@@ -7,7 +7,7 @@
  Ronald Oswaldo Macal de León      201612151<br />
  Virginia Sarai Gutierrez Depaz    201504443
 
-## NODEJS ARDUNO->API Funcionamiento
+## NODEJS ARDUINO->API Funcionamiento
 Servidor que recibe los comandos desde el COM del arduino y parsea los comandos para insertar la informacion en la DB a traves de la API
 
 La comunicacion se hace usando la libraria serialport y axios <br/>
