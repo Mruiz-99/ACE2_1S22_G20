@@ -1,4 +1,7 @@
-import org.apache.hc.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.*;
 
 PShape roundedLargeSquare;
 PShape roundedSquare;
@@ -18,7 +21,10 @@ int lastChangeL = 1;
 int lastChangeH = 1;
 
 String APIserver = "http://localhost:7000";
-
+HttpURLConnection connection;
+BufferedReader reader;
+String line;
+StringBuffer responseContent;
 
 void setup(){
   size(1024,760);
@@ -56,25 +62,140 @@ void setup(){
   sunIcon.scale(0.50);
   
   co2Icon = loadShape("Util/CO2Icon.svg");
-  
+  co2Icon.scale(6);
+}
+
+JSONArray sendGetRequest(String path){
+  try{
+    URL url = new URL(APIserver+path);
+    connection = (HttpURLConnection) url.openConnection();
+    
+    connection.setRequestMethod("GET");
+    connection.setConnectTimeout(200);
+    connection.setReadTimeout(200);
+    
+    responseContent = new StringBuffer();
+    int status = connection.getResponseCode();
+    
+    if(status > 299){
+      reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+      while((line = reader.readLine()) != null){
+        responseContent.append(line);
+      }
+      reader.close();
+    }else{
+      reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+      while((line = reader.readLine()) != null){
+        responseContent.append(line);
+      }
+      reader.close();
+    }
+    return parseJSONArray(responseContent.toString());
+  }catch(Exception e){
+    println("Error in request is: "+e.getMessage());
+    return parseJSONArray("[{}]");
+  }
 }
 
 void draw(){
+  JSONArray arrayJSONObject = sendGetRequest("/getTempRecords/Casa/");
+  double oldValue = 0,newValue = 0;
+  JSONObject newJSONvalue = arrayJSONObject.getJSONObject(0);
+  JSONObject oldJSONvalue = arrayJSONObject.getJSONObject(1);
+  newValue = newJSONvalue.getDouble("temperatura");
+  oldValue = oldJSONvalue.getDouble("temperatura");
+  drawTemp(30,30,"Temperatura Casa", newValue, oldValue);
   
-  try(final CloseableHttpClient httpclient = HttpClients.createDefault()){
-    final HttpGet httpget = new HttpGet("");    
+  arrayJSONObject = sendGetRequest("/getTempRecords/Pozo/");
+  newJSONvalue = arrayJSONObject.getJSONObject(0);
+  oldJSONvalue = arrayJSONObject.getJSONObject(1);
+  newValue = newJSONvalue.getDouble("temperatura");
+  oldValue = oldJSONvalue.getDouble("temperatura");
+  drawTemp(250,30,"Temperatura Pozo", newValue, oldValue);
+  
+  drawCO2(500,30,"Nivel de CO2", newValue, oldValue);
+  /*
+  arrayJSONObject = sendGetRequest("/getHumidityRecords/");
+  newJSONvalue = arrayJSONObject.getJSONObject(0);
+  oldJSONvalue = arrayJSONObject.getJSONObject(1);
+  newValue = newJSONvalue.getDouble("nivel");
+  oldValue = oldJSONvalue.getDouble("nivel");
+  */
+  
+  arrayJSONObject = sendGetRequest("/getLumenRecords/");
+  newJSONvalue = arrayJSONObject.getJSONObject(0);
+  oldJSONvalue = arrayJSONObject.getJSONObject(1);
+  newValue = newJSONvalue.getDouble("nivel");
+  oldValue = oldJSONvalue.getDouble("nivel");
+  drawLight(30,350,"Nivel de Luz", newValue, oldValue);
+  
+  arrayJSONObject = sendGetRequest("/getHumidityRecords/");
+  newJSONvalue = arrayJSONObject.getJSONObject(0);
+  oldJSONvalue = arrayJSONObject.getJSONObject(1);
+  newValue = newJSONvalue.getDouble("nivel");
+  oldValue = oldJSONvalue.getDouble("nivel");
+  drawHumidity(400,350,"Nivel de Humedad", newValue, oldValue);  
+}
+
+void drawCO2(int x, int y, String title, double new_ppm, double old_ppm){
+  shape(roundedSquare, x, y);
+  shape(co2Icon, x+40,y+170);
+  
+  // Draw the vertical sign of temp
+  stroke(255,134,128);
+  fill(255,134,128);
     
-  }catch(Exception e){
-    
-  }
-  
-  
-  drawTemp(30,30,"Temperatura Casa", 45, 50); 
-  drawTemp(250,30,"Temperatura Pozo", 35, 2);
-  drawLight(30,350,"Nivel de Luz", 45, 45);
-  drawHumidity(400,350,"Nivel de Humedad", 35, 45);
-  
-  
+  // Draw the temperature and a chevron depending on last change
+  //drawTempNChevron(x, y, new_temp, old_temp, new_temp-old_temp, type);
+  // Draw the block title at the bottowm slightly centered
+  fill(255);
+  textFont(titleFont, 20);
+  int xpos = ((200-(title.length()*10))/2)+5; 
+  text(title,x+xpos,y+290);
+}
+
+void drawCO2Chevron(int x, int y, double new_temp, double old_temp, double chevron_type, boolean type){
+  if(chevron_type > 0){
+    /** Case Temperature increased */
+    if(type){
+      lastChangeTC = 1;
+    }else{
+      lastChangeTP = 1;
+    }
+    shape(chevronUP, x+135, y+105);
+    textFont(valueFont, 25);
+    int xpos = (115-(((new_temp+"").length()+2))*10)/2;
+    fill(255);
+    text(new_temp+" °C",x+85+xpos,y+170);
+  }else if(chevron_type < 0){
+    /** Case Temperature decreased */
+    if(type){
+      lastChangeTC = -1;
+    }else{
+      lastChangeTP = -1;
+    }
+    // Temp
+    fill(255);
+    textFont(valueFont, 25);
+    int xpos = (115-(((new_temp+"").length()+2))*10)/2;
+    text(new_temp+" °C",x+85+xpos,y+135);
+    // Chevron
+    shape(chevronDown, x+135, y+140);
+  }else{
+    if(type){
+      if(lastChangeTC > 0){
+        drawTempNChevron(x, y, new_temp, old_temp, 1, true);
+      }else{
+        drawTempNChevron(x, y, new_temp, old_temp, -1, true);
+      }
+    }else{
+      if(lastChangeTP > 0){
+        drawTempNChevron(x, y, new_temp, old_temp, 1, false);
+      }else{
+        drawTempNChevron(x, y, new_temp, old_temp, -1, false);
+      }
+    }
+ }
 }
 
 void drawHumidity(int x, int y, String title, double new_hum, double old_hum){

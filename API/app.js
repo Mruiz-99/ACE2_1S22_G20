@@ -12,7 +12,9 @@ app.listen(port, () => {
 // Getters
 app.get('/getTempRecords/Casa/',api.getTempRecordsCasa);
 app.get('/getTempRecords/Pozo/',api.getTempRecordsPozo);
-
+app.get('/getLumenRecords/',api.getLumenRecords);
+app.get('/getHumidityRecords/',api.getHumidityRecords);
+app.get('/getCO2Records/',api.getCO2Records);
 
 // Posters
 app.post('/addTempRecord/Casa/', api.addTempRecordCasa);

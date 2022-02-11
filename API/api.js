@@ -8,14 +8,32 @@ const pool = new Pool({
 });
 
 const getTempRecordsCasa = async (request, response) => {
-    pool.query('SELECT * FROM Temp_Casa', (error, result) => {
+    pool.query('SELECT * FROM Temp_Casa ORDER BY timestamp DESC LIMIT 2', (error, result) => {
         response.status(200).json(result.rows);
     });
 };
 
 
 const getTempRecordsPozo = async (request, response) => {
-    pool.query('SELECT * FROM Temp_Pozo', (error, result) => {
+    pool.query('SELECT * FROM Temp_Pozo ORDER BY timestamp DESC LIMIT 2', (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
+const getLumenRecords = async (request, response) => {
+    pool.query('SELECT * FROM Luz ORDER BY timestamp DESC LIMIT 2', (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
+const getHumidityRecords = async (request, response) => {
+    pool.query('SELECT * FROM Humedad ORDER BY timestamp DESC LIMIT 2', (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
+const getCO2Records = async (request, response) => {
+    pool.query('SELECT * FROM CO2 ORDER BY timestamp DESC LIMIT 2', (error, result) => {
         response.status(200).json(result.rows);
     });
 };
@@ -85,6 +103,9 @@ const addHumidityRecord = async (request, response) => {
 module.exports = {
     getTempRecordsCasa,
     getTempRecordsPozo,
+    getHumidityRecords,
+    getCO2Records,
+    getLumenRecords,
     addTempRecordCasa,
     addTempRecordPozo,
     addLumenRecord,
