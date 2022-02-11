@@ -19,6 +19,7 @@ int lastChangeTC = 1;
 int lastChangeTP = 1;
 int lastChangeL = 1;
 int lastChangeH = 1;
+int lastChangeC = 1;
 
 String APIserver = "http://localhost:7000";
 HttpURLConnection connection;
@@ -62,7 +63,7 @@ void setup(){
   sunIcon.scale(0.50);
   
   co2Icon = loadShape("Util/CO2Icon.svg");
-  co2Icon.scale(6);
+  co2Icon.scale(0.3);
 }
 
 JSONArray sendGetRequest(String path){
@@ -106,21 +107,19 @@ void draw(){
   oldValue = oldJSONvalue.getDouble("temperatura");
   drawTemp(30,30,"Temperatura Casa", newValue, oldValue);
   
+  arrayJSONObject = sendGetRequest("/getCO2Records/");
+  newJSONvalue = arrayJSONObject.getJSONObject(0);
+  oldJSONvalue = arrayJSONObject.getJSONObject(1);
+  newValue = newJSONvalue.getDouble("nivel");
+  oldValue = oldJSONvalue.getDouble("nivel");
+  drawCO2(290,30,"Nivel de CO2", newValue, oldValue);
+  
   arrayJSONObject = sendGetRequest("/getTempRecords/Pozo/");
   newJSONvalue = arrayJSONObject.getJSONObject(0);
   oldJSONvalue = arrayJSONObject.getJSONObject(1);
   newValue = newJSONvalue.getDouble("temperatura");
   oldValue = oldJSONvalue.getDouble("temperatura");
-  drawTemp(250,30,"Temperatura Pozo", newValue, oldValue);
-  
-  drawCO2(500,30,"Nivel de CO2", newValue, oldValue);
-  /*
-  arrayJSONObject = sendGetRequest("/getHumidityRecords/");
-  newJSONvalue = arrayJSONObject.getJSONObject(0);
-  oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("nivel");
-  oldValue = oldJSONvalue.getDouble("nivel");
-  */
+  drawTemp(550,30,"Temperatura Pozo", newValue, oldValue);
   
   arrayJSONObject = sendGetRequest("/getLumenRecords/");
   newJSONvalue = arrayJSONObject.getJSONObject(0);
@@ -134,19 +133,17 @@ void draw(){
   oldJSONvalue = arrayJSONObject.getJSONObject(1);
   newValue = newJSONvalue.getDouble("nivel");
   oldValue = oldJSONvalue.getDouble("nivel");
-  drawHumidity(400,350,"Nivel de Humedad", newValue, oldValue);  
+  drawHumidity(400,350,"Nivel de Humedad", newValue, oldValue);
+  
+  delay(300);
 }
 
 void drawCO2(int x, int y, String title, double new_ppm, double old_ppm){
   shape(roundedSquare, x, y);
-  shape(co2Icon, x+40,y+170);
+  shape(co2Icon, x+30,y+125);
   
-  // Draw the vertical sign of temp
-  stroke(255,134,128);
-  fill(255,134,128);
-    
-  // Draw the temperature and a chevron depending on last change
-  //drawTempNChevron(x, y, new_temp, old_temp, new_temp-old_temp, type);
+  drawCO2Chevron(x,y,new_ppm,old_ppm,new_ppm-old_ppm);
+  
   // Draw the block title at the bottowm slightly centered
   fill(255);
   textFont(titleFont, 20);
@@ -154,47 +151,24 @@ void drawCO2(int x, int y, String title, double new_ppm, double old_ppm){
   text(title,x+xpos,y+290);
 }
 
-void drawCO2Chevron(int x, int y, double new_temp, double old_temp, double chevron_type, boolean type){
+void drawCO2Chevron(int x, int y, double new_ppm, double old_ppm, double chevron_type){
   if(chevron_type > 0){
-    /** Case Temperature increased */
-    if(type){
-      lastChangeTC = 1;
-    }else{
-      lastChangeTP = 1;
-    }
-    shape(chevronUP, x+135, y+105);
-    textFont(valueFont, 25);
-    int xpos = (115-(((new_temp+"").length()+2))*10)/2;
-    fill(255);
-    text(new_temp+" °C",x+85+xpos,y+170);
+    int xpos = (200-((new_ppm+"").length()*10))/2;
+    textFont(valueFont, 30);
+    text(new_ppm+"", x+xpos,y+100);
+    textFont(valueFont, 20);
+    text("ppm", x+90,y+120);
+    
+    shape(chevronUP,x+90,y+40);
   }else if(chevron_type < 0){
-    /** Case Temperature decreased */
-    if(type){
-      lastChangeTC = -1;
-    }else{
-      lastChangeTP = -1;
-    }
-    // Temp
-    fill(255);
-    textFont(valueFont, 25);
-    int xpos = (115-(((new_temp+"").length()+2))*10)/2;
-    text(new_temp+" °C",x+85+xpos,y+135);
-    // Chevron
-    shape(chevronDown, x+135, y+140);
+    int xpos = (200-((new_ppm+"").length()*10))/2;
+    textFont(valueFont, 30);
+    text(new_ppm+"", x+xpos,y+70);
+    textFont(valueFont, 20);
+    text("ppm", x+90,y+90);
+    shape(chevronDown,x+90,y+90);
   }else{
-    if(type){
-      if(lastChangeTC > 0){
-        drawTempNChevron(x, y, new_temp, old_temp, 1, true);
-      }else{
-        drawTempNChevron(x, y, new_temp, old_temp, -1, true);
-      }
-    }else{
-      if(lastChangeTP > 0){
-        drawTempNChevron(x, y, new_temp, old_temp, 1, false);
-      }else{
-        drawTempNChevron(x, y, new_temp, old_temp, -1, false);
-      }
-    }
+    drawCO2Chevron(x,y,new_ppm,old_ppm,lastChangeC);
  }
 }
 
