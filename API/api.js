@@ -13,7 +13,6 @@ const getTempRecordsCasa = async (request, response) => {
     });
 };
 
-
 const getTempRecordsPozo = async (request, response) => {
     pool.query('SELECT * FROM Temp_Pozo ORDER BY timestamp DESC LIMIT 2', (error, result) => {
         response.status(200).json(result.rows);
@@ -62,7 +61,6 @@ const addTempRecordPozo = async (request, response) => {
     });
 }
 
-
 const addLumenRecord = async (request, response) => {
     const { lumens } = request.body;
     console.log(`Insertando nuevo valor de Iluminacion: ${lumens} lumens`);
@@ -86,7 +84,6 @@ const addCO2Record = async (request, response) => {
         }        
     });
 }
-
 
 const addHumidityRecord = async (request, response) => {
     const { porcentaje } = request.body;

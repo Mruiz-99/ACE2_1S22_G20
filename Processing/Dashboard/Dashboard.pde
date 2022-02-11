@@ -153,14 +153,15 @@ void drawCO2(int x, int y, String title, double new_ppm, double old_ppm){
 
 void drawCO2Chevron(int x, int y, double new_ppm, double old_ppm, double chevron_type){
   if(chevron_type > 0){
+    lastChangeC = 1;
     int xpos = (200-((new_ppm+"").length()*10))/2;
     textFont(valueFont, 30);
     text(new_ppm+"", x+xpos,y+100);
     textFont(valueFont, 20);
     text("ppm", x+90,y+120);
-    
     shape(chevronUP,x+90,y+40);
   }else if(chevron_type < 0){
+    lastChangeC = -1;
     int xpos = (200-((new_ppm+"").length()*10))/2;
     textFont(valueFont, 30);
     text(new_ppm+"", x+xpos,y+70);

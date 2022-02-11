@@ -4,7 +4,6 @@ const api = require('./api');
 const port = 7000;
 
 app.use(express.json());
-
 app.listen(port, () => {
     console.log(`IoT API is running on port ${port}`);
 });
