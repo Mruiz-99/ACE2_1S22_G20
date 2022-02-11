@@ -10,7 +10,7 @@
 ## NODEJS ARDUNO->API Funcionamiento
 Servidor que recibe los comandos desde el COM del arduino y parsea los comandos para insertar la informacion en la DB a traves de la API
 
-La comunicacion se hace usando la libraria serialport y axios
+La comunicacion se hace usando la libraria serialport y axios <br/>
 Pueden instalarse con el comando: <br/>
 ~~~bash
 npm i serialport y npm i axios
