@@ -44,5 +44,5 @@ void loop() {
 
   Serial.print("CO2PPM ");
   Serial.println(co2Read);
-  delay(5000);
+  delay(500);
 }

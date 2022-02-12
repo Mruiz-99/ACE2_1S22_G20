@@ -1,3 +1,4 @@
+const GraphLimit = 50;
 const Pool = require('pg').Pool;
 const pool = new Pool({
     user: 'pozoapi',
@@ -13,8 +14,20 @@ const getTempRecordsCasa = async (request, response) => {
     });
 };
 
+const getTempRecordsCasaGL = async (request, response) => {
+    pool.query(`SELECT * FROM (SELECT * FROM Temp_Casa ORDER BY timestamp DESC LIMIT ${GraphLimit}) as Records ORDER BY timestamp ASC`, (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
 const getTempRecordsPozo = async (request, response) => {
     pool.query('SELECT * FROM Temp_Pozo ORDER BY timestamp DESC LIMIT 2', (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
+const getTempRecordsPozoGL = async (request, response) => {
+    pool.query(`SELECT * FROM (SELECT * FROM Temp_Pozo ORDER BY timestamp DESC LIMIT ${GraphLimit}) as Records ORDER BY timestamp ASC`, (error, result) => {
         response.status(200).json(result.rows);
     });
 };
@@ -25,14 +38,32 @@ const getLumenRecords = async (request, response) => {
     });
 };
 
+const getLumenRecordsGL = async (request, response) => {
+    pool.query(`SELECT * FROM Luz ORDER BY timestamp DESC LIMIT ${GraphLimit}`, (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
 const getHumidityRecords = async (request, response) => {
     pool.query('SELECT * FROM Humedad ORDER BY timestamp DESC LIMIT 2', (error, result) => {
         response.status(200).json(result.rows);
     });
 };
 
+const getHumidityRecordsGL = async (request, response) => {
+    pool.query(`SELECT * FROM Humedad ORDER BY timestamp DESC LIMIT ${GraphLimit}`, (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
 const getCO2Records = async (request, response) => {
     pool.query('SELECT * FROM CO2 ORDER BY timestamp DESC LIMIT 2', (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
+const getCO2RecordsGL = async (request, response) => {
+    pool.query(`SELECT * FROM CO2 ORDER BY timestamp DESC LIMIT ${GraphLimit}`, (error, result) => {
         response.status(200).json(result.rows);
     });
 };
@@ -103,6 +134,11 @@ module.exports = {
     getHumidityRecords,
     getCO2Records,
     getLumenRecords,
+    getTempRecordsCasaGL,
+    getTempRecordsPozoGL,
+    getHumidityRecordsGL,
+    getCO2RecordsGL,
+    getLumenRecordsGL,
     addTempRecordCasa,
     addTempRecordPozo,
     addLumenRecord,
