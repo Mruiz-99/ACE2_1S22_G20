@@ -4,14 +4,12 @@ import Base from './Components/Base';
 import './App.css';
 import TopMenu from './Components/TopMenu';
 import Exp1 from './Components/Exp1';
+import Exp2 from './Components/Exp2';
+import Exp3 from './Components/Exp3';
 
 export default class App extends Component {
   state = {
     location: 0
-  }
-
-  constructor(props){
-    super(props);
   }
 
   menuHandler = (new_location) => {
@@ -30,10 +28,10 @@ export default class App extends Component {
         return <Exp1 />;
       case 2:
       // Experiment 2
-        return <Base />;
+        return <Exp2 />;
       case 3:
-      // Experiment 3      
-        return <Base />;
+      // Experiment 3
+        return <Exp3 />;
       default:
           return <Base />;
     }

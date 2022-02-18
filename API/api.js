@@ -39,7 +39,7 @@ const getLumenRecords = async (request, response) => {
 };
 
 const getLumenRecordsGL = async (request, response) => {
-    pool.query(`SELECT * FROM Luz ORDER BY timestamp DESC LIMIT ${GraphLimit}`, (error, result) => {
+    pool.query(`SELECT * FROM (SELECT * FROM Luz ORDER BY timestamp DESC LIMIT ${GraphLimit}) as Records ORDER BY timestamp ASC`, (error, result) => {
         response.status(200).json(result.rows);
     });
 };
@@ -51,7 +51,7 @@ const getHumidityRecords = async (request, response) => {
 };
 
 const getHumidityRecordsGL = async (request, response) => {
-    pool.query(`SELECT * FROM Humedad ORDER BY timestamp DESC LIMIT ${GraphLimit}`, (error, result) => {
+    pool.query(`SELECT * FROM (SELECT * FROM Humedad ORDER BY timestamp DESC LIMIT ${GraphLimit}) as Records ORDER BY timestamp ASC`, (error, result) => {
         response.status(200).json(result.rows);
     });
 };
@@ -63,7 +63,7 @@ const getCO2Records = async (request, response) => {
 };
 
 const getCO2RecordsGL = async (request, response) => {
-    pool.query(`SELECT * FROM CO2 ORDER BY timestamp DESC LIMIT ${GraphLimit}`, (error, result) => {
+    pool.query(`SELECT * FROM (SELECT * FROM CO2 ORDER BY timestamp DESC LIMIT ${GraphLimit}) as Records ORDER BY timestamp ASC`, (error, result) => {
         response.status(200).json(result.rows);
     });
 };

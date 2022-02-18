@@ -5,11 +5,11 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
 
-export default class Exp1 extends Component {
+export default class Exp2 extends Component {
 
     state = {
         data_casa: [],
-        data_pozo: []
+        data_luz: []
     }
 
     constructor(){
@@ -38,11 +38,11 @@ export default class Exp1 extends Component {
             if(this.chart !== undefined) this.chart.render();
         });
         
-        this.getInitDataFromAPI_Pozo().then((result) => {
+        this.getInitDataFromAPI_Lumen().then((result) => {
             result.forEach(element => {
-                this.state.data_pozo.push({
+                this.state.data_luz.push({
                     x: parseFloat(element.id),
-                    y: parseFloat(element.temperatura)
+                    y: parseFloat(element.nivel)
                 });              
             });
             if(this.chart !== undefined) this.chart.render();
@@ -54,14 +54,14 @@ export default class Exp1 extends Component {
             this.state.data_casa.push({
                 x: parseFloat(result[0].id),
                 y: parseFloat(result[0].temperatura)
-            });              
+            });
             if(this.chart !== undefined) this.chart.render();
         });
 
-        this.getLatestValueFromAPI_Pozo().then((result) => {
-            this.state.data_pozo.push({
+        this.getLatestValueFromAPI_Lumen().then((result) => {
+            this.state.data_luz.push({
                 x: parseFloat(result[0].id),
-                y: parseFloat(result[0].temperatura)
+                y: parseFloat(result[0].nivel)
             });              
             if(this.chart !== undefined) this.chart.render();
         });                
@@ -81,12 +81,12 @@ export default class Exp1 extends Component {
         return body;
     }
 
-    getLatestValueFromAPI_Pozo  = async() => {
+    getLatestValueFromAPI_Lumen  = async() => {
         const requestOpions = {
           method: 'GET',
           headers: { 'Content-Type': 'application/json'}
         };
-        const response = await fetch("/getTempRecords/Pozo/");
+        const response = await fetch("/getLumenRecords/");
         const body = await response.json();
     
         if(response.status !== 200){
@@ -109,12 +109,12 @@ export default class Exp1 extends Component {
         return body;
     }
 
-    getInitDataFromAPI_Pozo = async() => {
+    getInitDataFromAPI_Lumen = async() => {
         const requestOpions = {
           method: 'GET',
           headers: { 'Content-Type': 'application/json'}
         };
-        const response = await fetch("/getTempRecords/Pozo/GraphInit/");
+        const response = await fetch("/getLumenRecords/GraphInit/");
         const body = await response.json();
     
         if(response.status !== 200){
@@ -136,20 +136,20 @@ export default class Exp1 extends Component {
                 shared: true
             },
             title:{
-                text: "Temperatura Casa vs Pozo"
+                text: "Temperatura vs Iluminacion"
             },
             data:[
                 {
                     type: "line",
-                    name: "Casa",
+                    name: "Temperatura",
                     showLegend: true,
                     dataPoints: this.state.data_casa
                 },
                 {
                     type: "line",
-                    name: "Pozo",
+                    name: "Lumens",
                     showLegend: true,
-                    dataPoints: this.state.data_pozo
+                    dataPoints: this.state.data_luz
                 }
             ]
         }

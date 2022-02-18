@@ -5,7 +5,7 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
 
-export default class Exp1 extends Component {
+export default class Exp2 extends Component {
 
     state = {
         data_casa: [],
@@ -42,7 +42,7 @@ export default class Exp1 extends Component {
             result.forEach(element => {
                 this.state.data_pozo.push({
                     x: parseFloat(element.id),
-                    y: parseFloat(element.temperatura)
+                    y: parseFloat(element.nivel)
                 });              
             });
             if(this.chart !== undefined) this.chart.render();
@@ -61,7 +61,7 @@ export default class Exp1 extends Component {
         this.getLatestValueFromAPI_Pozo().then((result) => {
             this.state.data_pozo.push({
                 x: parseFloat(result[0].id),
-                y: parseFloat(result[0].temperatura)
+                y: parseFloat(result[0].nivel)
             });              
             if(this.chart !== undefined) this.chart.render();
         });                
@@ -114,7 +114,7 @@ export default class Exp1 extends Component {
           method: 'GET',
           headers: { 'Content-Type': 'application/json'}
         };
-        const response = await fetch("/getTempRecords/Pozo/GraphInit/");
+        const response = await fetch("/getHumidityRecords/GraphInit/");
         const body = await response.json();
     
         if(response.status !== 200){
@@ -136,18 +136,18 @@ export default class Exp1 extends Component {
                 shared: true
             },
             title:{
-                text: "Temperatura Casa vs Pozo"
+                text: "Temperatura Casa vs Humedad Pozo"
             },
             data:[
                 {
                     type: "line",
-                    name: "Casa",
+                    name: "Temperatura",
                     showLegend: true,
                     dataPoints: this.state.data_casa
                 },
                 {
                     type: "line",
-                    name: "Pozo",
+                    name: "% Humedad",
                     showLegend: true,
                     dataPoints: this.state.data_pozo
                 }
