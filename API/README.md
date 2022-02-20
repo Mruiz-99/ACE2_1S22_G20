@@ -33,3 +33,44 @@ Para finalmente iniciar el servidor ejecutar el siguiente comando desde la raiz 
 ```bash
 $ npm run serve
 ```
+
+#### GET / POST de la API
+
+Para interactuar con la api se pueden realizar las siguientes peticiones post/get que devolveran informacion en formato JSON
+
+##### Agregar temperatura de la casa o el pozo: 
+ **POST:** /addTempRecord/Casa/ <br/>
+ **POST:** /addTempRecord/Pozo/ <br/>
+ Con el siguiente formato en el body
+ ```json
+ {
+     "temp": 10.34 
+ }
+ ```
+ 
+ ##### Agregar nivel de iluminacion: 
+ **POST:** /addLumenRecord/ <br/>
+ Con el siguiente formato en el body <br/>
+ ```json
+ {
+     "lumens": 234 
+ }
+ ```
+ 
+ ##### Agregar nivel de CO2: 
+ **POST:** /addCO2Record/ <br />
+ Con el siguiente formato en el body <br/>
+ ```json
+ {
+     "ppm": 23.4 
+ }
+ ```
+ 
+ ##### Agregar nivel de CO2: 
+ **POST:** /addHumidityRecord/ <br/>
+ Con el siguiente formato en el body <br/>
+ ```json
+ {
+     "porcentaje": 15 
+ }
+ ```
