@@ -6,18 +6,20 @@ const TEMP_POZO = "TEMPP";
 const HUMIDITY = "HUMIDITY";
 const CO2PPM = "CO2PPM";
 
+const ARDUINO_COM ="COM2";
+
 // COM1 puerto virtual que envia la informacion (de pruebas de Proteus)
 // COM2 puerto virtual que recibe la informacion (de pruebas de Proteus)
 
 const serialPort = require('serialport');
 var createInterface = require('readline').createInterface;
-var arduino = new serialPort("COM2", {baudRate: 9600});
+var arduino = new serialPort(ARDUINO_COM, {baudRate: 9600});
 
 var lineReader = createInterface({
     input: arduino
 });
 
-console.log("Arduino Listener Running...");
+console.log(`Arduino Listener Running on ${ARDUINO_COM}...`);
 
 lineReader.on('line', (line) => {
     if(line.includes(LUMEN)){
@@ -42,7 +44,7 @@ lineReader.on('line', (line) => {
             console.log(res.data);
         })
         .catch(error => {
-            console.log("La peticion a http://localhost:7000/addTempRecord/Casa/ fallo: ",error);
+            console.log(`Enviando peticion a: ${API_SERVER}/addTempRecord/Casa/ fallo: `,error);
         });
     }else if(line.includes(TEMP_POZO)){
         const val = line.replace(TEMP_POZO,"").replace(" ","");
@@ -54,7 +56,7 @@ lineReader.on('line', (line) => {
             console.log(res.data);
         })
         .catch(error => {
-            console.log("La peticion a http://localhost:7000/addTempRecord/Pozo/ fallo: ",error);
+            console.log(`Enviando peticion a: ${API_SERVER}/addTempRecord/Pozo/ fallo: `,error);
         });
     }else if(line.includes(HUMIDITY)){
         const val = line.replace(HUMIDITY,"").replace(" ","");
@@ -66,7 +68,7 @@ lineReader.on('line', (line) => {
             console.log(res.data);
         })
         .catch(error => {
-            console.log("La peticion a http://localhost:7000/addHumidityRecord/ fallo: ",error);
+            console.log(`Enviando peticion a: ${API_SERVER}/addHumidityRecord/ fallo: `,error);
         });
     }else if(line.includes(CO2PPM)){
         const val = line.replace(CO2PPM,"").replace(" ","");
@@ -78,7 +80,7 @@ lineReader.on('line', (line) => {
             console.log(res.data);
         })
         .catch(error => {
-            console.log("La peticion a http://localhost:7000/addCO2Record/ fallo: ",error);
+            console.log(`Enviando peticion a: ${API_SERVER}/addCO2Record/ fallo: `,error);
         });
     }else{
         console.log("Unrecognized Command: ",line);
