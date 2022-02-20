@@ -6,7 +6,9 @@ import java.net.*;
 PShape roundedLargeSquare;
 PShape roundedSquare;
 PShape termometro;
-PShape waterDrop;
+PShape waterDrop_33;
+PShape waterDrop_66;
+PShape waterDrop_100;
 PShape sunIcon;
 PShape co2Icon;
 PShape chevronUP;
@@ -56,8 +58,14 @@ void setup(){
   termometro.scale(0.5);
   
   
-  waterDrop = loadShape("Util/HumidityIcon.svg");
-  waterDrop.scale(0.5);
+  waterDrop_33 = loadShape("Util/HumidityIcon_33.svg");
+  waterDrop_33.scale(0.5);
+  
+  waterDrop_66 = loadShape("Util/HumidityIcon_66.svg");
+  waterDrop_66.scale(0.5);
+  
+  waterDrop_100 = loadShape("Util/HumidityIcon_100.svg");
+  waterDrop_100.scale(0.5);
   
   sunIcon = loadShape("Util/SunIcon.svg");
   sunIcon.scale(0.50);
@@ -176,7 +184,13 @@ void drawCO2Chevron(int x, int y, double new_ppm, double old_ppm, double chevron
 void drawHumidity(int x, int y, String title, double new_hum, double old_hum){
   // Background Shape and Icon
   shape(roundedLargeSquare, x, y);
-  shape(waterDrop, x+130,y+20);
+  if(new_hum <= 33){
+    shape(waterDrop_33, x+130,y+20);
+  }else if(new_hum <= 66){
+    shape(waterDrop_66, x+130,y+20);
+  }else{
+    shape(waterDrop_100, x+130,y+20);
+  }
   
   // Change Indicator
   drawHumidityChevron(x,y, new_hum-old_hum);
@@ -209,10 +223,39 @@ void drawLight(int x, int y, String title, double new_lumen, double old_lumen){
   shape(roundedLargeSquare, x, y);
   shape(sunIcon, x+55,y+15);
   
+  if(new_lumen <= 100){
+    stroke(105,84,0);
+    fill(105,84,0);
+  }else if(new_lumen <= 200){
+    stroke(127,101,0);
+    fill(127,101,0);
+  }else if(new_lumen <= 300){
+    stroke(175,142,9);
+    fill(175,142,9);
+  }else if(new_lumen <= 500){
+    stroke(216,180,37);
+    fill(216,180,37);
+  }else if(new_lumen <= 700){
+    stroke(242,204,17);
+    fill(242,204,17);
+  }else if(new_lumen <= 800){
+    stroke(242,219,17);
+    fill(242,219,17);
+  }else if(new_lumen <= 1000){
+    stroke(255,233,21);
+    fill(255,233,21);
+  }else{
+    stroke(255,255,0);
+    fill(255,255,0);
+  }
+  
+  ellipse(x+182,y+142,150,150);
+  
   // Change Indicator
   drawLightChevron(x,y, new_lumen-old_lumen);
   
   // Lumen Information
+  fill(255);
   int xpos = 110+(145-((new_lumen+"").length())*13)/2;
   textFont(valueFont, 30);
   text(new_lumen+"", x+xpos,y+150);
