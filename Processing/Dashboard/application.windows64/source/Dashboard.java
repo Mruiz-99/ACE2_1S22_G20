@@ -8,6 +8,156 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection; 
 import java.net.*; 
 
+import org.apache.commons.cli.*; 
+import org.apache.commons.codec.*; 
+import org.apache.commons.codec.binary.*; 
+import org.apache.commons.codec.cli.*; 
+import org.apache.commons.codec.digest.*; 
+import org.apache.commons.codec.language.*; 
+import org.apache.commons.codec.language.bm.*; 
+import org.apache.commons.codec.net.*; 
+import org.apache.hc.client5.http.*; 
+import org.apache.hc.client5.http.async.*; 
+import org.apache.hc.client5.http.async.methods.*; 
+import org.apache.hc.client5.http.auth.*; 
+import org.apache.hc.client5.http.classic.*; 
+import org.apache.hc.client5.http.classic.methods.*; 
+import org.apache.hc.client5.http.config.*; 
+import org.apache.hc.client5.http.cookie.*; 
+import org.apache.hc.client5.http.entity.*; 
+import org.apache.hc.client5.http.entity.mime.*; 
+import org.apache.hc.client5.http.impl.*; 
+import org.apache.hc.client5.http.impl.async.*; 
+import org.apache.hc.client5.http.impl.auth.*; 
+import org.apache.hc.client5.http.impl.classic.*; 
+import org.apache.hc.client5.http.impl.cookie.*; 
+import org.apache.hc.client5.http.impl.io.*; 
+import org.apache.hc.client5.http.impl.nio.*; 
+import org.apache.hc.client5.http.impl.routing.*; 
+import org.apache.hc.client5.http.io.*; 
+import org.apache.hc.client5.http.nio.*; 
+import org.apache.hc.client5.http.protocol.*; 
+import org.apache.hc.client5.http.psl.*; 
+import org.apache.hc.client5.http.routing.*; 
+import org.apache.hc.client5.http.socket.*; 
+import org.apache.hc.client5.http.ssl.*; 
+import org.apache.hc.client5.http.utils.*; 
+import org.apache.hc.client5.http.cache.*; 
+import org.apache.hc.client5.http.impl.cache.*; 
+import org.apache.hc.client5.http.impl.cache.ehcache.*; 
+import org.apache.hc.client5.http.impl.cache.memcached.*; 
+import org.apache.hc.client5.http.impl.schedule.*; 
+import org.apache.hc.client5.http.schedule.*; 
+import org.apache.hc.client5.http.fluent.*; 
+import org.apache.hc.client5.testing.async.*; 
+import org.apache.hc.client5.testing.auth.*; 
+import org.apache.hc.client5.testing.classic.*; 
+import org.apache.hc.client5.testing.redirect.*; 
+import org.apache.hc.client5.http.impl.win.*; 
+import org.apache.hc.core5.annotation.*; 
+import org.apache.hc.core5.concurrent.*; 
+import org.apache.hc.core5.function.*; 
+import org.apache.hc.core5.http.*; 
+import org.apache.hc.core5.http.config.*; 
+import org.apache.hc.core5.http.impl.*; 
+import org.apache.hc.core5.http.impl.bootstrap.*; 
+import org.apache.hc.core5.http.impl.io.*; 
+import org.apache.hc.core5.http.impl.nio.*; 
+import org.apache.hc.core5.http.io.*; 
+import org.apache.hc.core5.http.io.entity.*; 
+import org.apache.hc.core5.http.io.ssl.*; 
+import org.apache.hc.core5.http.io.support.*; 
+import org.apache.hc.core5.http.message.*; 
+import org.apache.hc.core5.http.nio.*; 
+import org.apache.hc.core5.http.nio.command.*; 
+import org.apache.hc.core5.http.nio.entity.*; 
+import org.apache.hc.core5.http.nio.ssl.*; 
+import org.apache.hc.core5.http.nio.support.*; 
+import org.apache.hc.core5.http.nio.support.classic.*; 
+import org.apache.hc.core5.http.protocol.*; 
+import org.apache.hc.core5.http.ssl.*; 
+import org.apache.hc.core5.http.support.*; 
+import org.apache.hc.core5.io.*; 
+import org.apache.hc.core5.net.*; 
+import org.apache.hc.core5.pool.*; 
+import org.apache.hc.core5.reactor.*; 
+import org.apache.hc.core5.reactor.ssl.*; 
+import org.apache.hc.core5.ssl.*; 
+import org.apache.hc.core5.util.*; 
+import org.apache.hc.core5.http2.*; 
+import org.apache.hc.core5.http2.config.*; 
+import org.apache.hc.core5.http2.frame.*; 
+import org.apache.hc.core5.http2.hpack.*; 
+import org.apache.hc.core5.http2.impl.*; 
+import org.apache.hc.core5.http2.impl.io.*; 
+import org.apache.hc.core5.http2.impl.nio.*; 
+import org.apache.hc.core5.http2.impl.nio.bootstrap.*; 
+import org.apache.hc.core5.http2.nio.*; 
+import org.apache.hc.core5.http2.nio.command.*; 
+import org.apache.hc.core5.http2.nio.pool.*; 
+import org.apache.hc.core5.http2.nio.support.*; 
+import org.apache.hc.core5.http2.protocol.*; 
+import org.apache.hc.core5.http2.ssl.*; 
+import org.apache.hc.core5.reactive.*; 
+import org.apache.hc.core5.benchmark.*; 
+import org.apache.hc.core5.testing.*; 
+import org.apache.hc.core5.testing.classic.*; 
+import org.apache.hc.core5.testing.framework.*; 
+import org.apache.hc.core5.testing.nio.*; 
+import org.apache.hc.core5.testing.reactive.*; 
+import hudson.plugins.javanet.*; 
+import com.sun.jna.*; 
+import com.sun.jna.ptr.*; 
+import com.sun.jna.win32.*; 
+import com.sun.jna.platform.*; 
+import com.sun.jna.platform.dnd.*; 
+import com.sun.jna.platform.linux.*; 
+import com.sun.jna.platform.mac.*; 
+import com.sun.jna.platform.unix.*; 
+import com.sun.jna.platform.unix.solaris.*; 
+import com.sun.jna.platform.win32.*; 
+import com.sun.jna.platform.win32.COM.*; 
+import com.sun.jna.platform.win32.COM.tlb.*; 
+import com.sun.jna.platform.win32.COM.tlb.imp.*; 
+import com.sun.jna.platform.win32.COM.util.*; 
+import com.sun.jna.platform.win32.COM.util.annotation.*; 
+import com.sun.jna.platform.wince.*; 
+import org.reactivestreams.*; 
+import io.reactivex.*; 
+import io.reactivex.subscribers.*; 
+import io.reactivex.flowables.*; 
+import io.reactivex.parallel.*; 
+import io.reactivex.observables.*; 
+import io.reactivex.functions.*; 
+import io.reactivex.disposables.*; 
+import io.reactivex.subjects.*; 
+import io.reactivex.annotations.*; 
+import io.reactivex.observers.*; 
+import io.reactivex.processors.*; 
+import io.reactivex.plugins.*; 
+import io.reactivex.schedulers.*; 
+import io.reactivex.internal.subscribers.*; 
+import io.reactivex.internal.queue.*; 
+import io.reactivex.internal.functions.*; 
+import io.reactivex.internal.disposables.*; 
+import io.reactivex.internal.util.*; 
+import io.reactivex.internal.observers.*; 
+import io.reactivex.internal.subscriptions.*; 
+import io.reactivex.internal.operators.mixed.*; 
+import io.reactivex.internal.operators.completable.*; 
+import io.reactivex.internal.operators.parallel.*; 
+import io.reactivex.internal.operators.maybe.*; 
+import io.reactivex.internal.operators.flowable.*; 
+import io.reactivex.internal.operators.single.*; 
+import io.reactivex.internal.operators.observable.*; 
+import io.reactivex.internal.schedulers.*; 
+import io.reactivex.internal.fuseable.*; 
+import io.reactivex.exceptions.*; 
+import org.slf4j.event.*; 
+import org.slf4j.helpers.*; 
+import org.slf4j.*; 
+import org.slf4j.spi.*; 
+
 import java.util.HashMap; 
 import java.util.ArrayList; 
 import java.io.File; 
@@ -43,6 +193,12 @@ int lastChangeTP = 1;
 int lastChangeL = 1;
 int lastChangeH = 1;
 int lastChangeC = 1;
+
+double lastTC = 0.0f;
+double lastTP = 0.0f;
+double lastL = 0.0f;
+double lastH = 0.0f;
+double lastC = 0.0f;
 
 String APIserver = "http://localhost:7000";
 HttpURLConnection connection;
@@ -128,41 +284,70 @@ public JSONArray sendGetRequest(String path){
 }
 
 public void draw(){
-  JSONArray arrayJSONObject = sendGetRequest("/getTempRecords/Casa/");
+  JSONArray arrayJSONObject;
   double oldValue = 0,newValue = 0;
-  JSONObject newJSONvalue = arrayJSONObject.getJSONObject(0);
-  JSONObject oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("temperatura");
-  oldValue = oldJSONvalue.getDouble("temperatura");
-  drawTemp(30,30,"Temperatura Casa", newValue, oldValue);
+  JSONObject newJSONvalue;
+  JSONObject oldJSONvalue;
   
-  arrayJSONObject = sendGetRequest("/getCO2Records/");
-  newJSONvalue = arrayJSONObject.getJSONObject(0);
-  oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("nivel");
-  oldValue = oldJSONvalue.getDouble("nivel");
-  drawCO2(290,30,"Nivel de CO2", newValue, oldValue);
+  try{
+    arrayJSONObject = sendGetRequest("/getTempRecords/Casa/");
+    newJSONvalue = arrayJSONObject.getJSONObject(0);
+    oldJSONvalue = arrayJSONObject.getJSONObject(1);
+    newValue = newJSONvalue.getDouble("temperatura");
+    lastTC = newValue;
+    oldValue = oldJSONvalue.getDouble("temperatura");
+    drawTemp(30,30,"Temperatura Casa", newValue, oldValue);
+  }catch(Exception e){
+    drawTemp(30,30,"Temperatura Casa", lastTC, lastTC);
+  }
   
-  arrayJSONObject = sendGetRequest("/getTempRecords/Pozo/");
-  newJSONvalue = arrayJSONObject.getJSONObject(0);
-  oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("temperatura");
-  oldValue = oldJSONvalue.getDouble("temperatura");
-  drawTemp(550,30,"Temperatura Pozo", newValue, oldValue);
+  try{
+    arrayJSONObject = sendGetRequest("/getCO2Records/");
+    newJSONvalue = arrayJSONObject.getJSONObject(0);
+    oldJSONvalue = arrayJSONObject.getJSONObject(1);
+    newValue = newJSONvalue.getDouble("nivel");
+    lastC = newValue;
+    oldValue = oldJSONvalue.getDouble("nivel");
+    drawCO2(290,30,"Nivel de CO2", newValue, oldValue);
+  }catch(Exception e){
+    drawCO2(290,30,"Nivel de CO2", lastC, lastC);
+  }
   
-  arrayJSONObject = sendGetRequest("/getLumenRecords/");
-  newJSONvalue = arrayJSONObject.getJSONObject(0);
-  oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("nivel");
-  oldValue = oldJSONvalue.getDouble("nivel");
-  drawLight(30,350,"Nivel de Luz", newValue, oldValue);
+  try{
+    arrayJSONObject = sendGetRequest("/getTempRecords/Pozo/");
+    newJSONvalue = arrayJSONObject.getJSONObject(0);
+    oldJSONvalue = arrayJSONObject.getJSONObject(1);
+    newValue = newJSONvalue.getDouble("temperatura");
+    lastTP = newValue;
+    oldValue = oldJSONvalue.getDouble("temperatura");
+    drawTemp(550,30,"Temperatura Pozo", newValue, oldValue);
+  }catch(Exception e){
+    drawTemp(550,30,"Temperatura Pozo", lastTP, lastTP);
+  }
   
-  arrayJSONObject = sendGetRequest("/getHumidityRecords/");
-  newJSONvalue = arrayJSONObject.getJSONObject(0);
-  oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("nivel");
-  oldValue = oldJSONvalue.getDouble("nivel");
-  drawHumidity(400,350,"Nivel de Humedad", newValue, oldValue);
+  try{
+    arrayJSONObject = sendGetRequest("/getLumenRecords/");
+    newJSONvalue = arrayJSONObject.getJSONObject(0);
+    oldJSONvalue = arrayJSONObject.getJSONObject(1);
+    newValue = newJSONvalue.getDouble("nivel");
+    lastL = newValue;
+    oldValue = oldJSONvalue.getDouble("nivel");
+    drawLight(30,350,"Nivel de Luz", newValue, oldValue);
+  }catch(Exception e){
+    drawLight(30,350,"Nivel de Luz", lastL, lastL);
+  }
+  
+  try{
+    arrayJSONObject = sendGetRequest("/getHumidityRecords/");
+    newJSONvalue = arrayJSONObject.getJSONObject(0);
+    oldJSONvalue = arrayJSONObject.getJSONObject(1);
+    newValue = newJSONvalue.getDouble("nivel");
+    lastH = newValue;
+    oldValue = oldJSONvalue.getDouble("nivel");
+    drawHumidity(400,350,"Nivel de Humedad", newValue, oldValue);
+  }catch(Exception e){
+    drawHumidity(400,350,"Nivel de Humedad", lastH, lastH);
+  }
   
   delay(300);
 }
@@ -270,7 +455,7 @@ public void drawLight(int x, int y, String title, double new_lumen, double old_l
     fill(255,255,0);
   }
   
-  ellipse(x+182,y+142,150,150);
+  ellipse(x+183,y+144,150,150);
   
   // Change Indicator
   drawLightChevron(x,y, new_lumen-old_lumen);

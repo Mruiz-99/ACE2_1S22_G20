@@ -23,6 +23,12 @@ int lastChangeL = 1;
 int lastChangeH = 1;
 int lastChangeC = 1;
 
+double lastTC = 0.0;
+double lastTP = 0.0;
+double lastL = 0.0;
+double lastH = 0.0;
+double lastC = 0.0;
+
 String APIserver = "http://localhost:7000";
 HttpURLConnection connection;
 BufferedReader reader;
@@ -107,41 +113,70 @@ JSONArray sendGetRequest(String path){
 }
 
 void draw(){
-  JSONArray arrayJSONObject = sendGetRequest("/getTempRecords/Casa/");
+  JSONArray arrayJSONObject;
   double oldValue = 0,newValue = 0;
-  JSONObject newJSONvalue = arrayJSONObject.getJSONObject(0);
-  JSONObject oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("temperatura");
-  oldValue = oldJSONvalue.getDouble("temperatura");
-  drawTemp(30,30,"Temperatura Casa", newValue, oldValue);
+  JSONObject newJSONvalue;
+  JSONObject oldJSONvalue;
   
-  arrayJSONObject = sendGetRequest("/getCO2Records/");
-  newJSONvalue = arrayJSONObject.getJSONObject(0);
-  oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("nivel");
-  oldValue = oldJSONvalue.getDouble("nivel");
-  drawCO2(290,30,"Nivel de CO2", newValue, oldValue);
+  try{
+    arrayJSONObject = sendGetRequest("/getTempRecords/Casa/");
+    newJSONvalue = arrayJSONObject.getJSONObject(0);
+    oldJSONvalue = arrayJSONObject.getJSONObject(1);
+    newValue = newJSONvalue.getDouble("temperatura");
+    lastTC = newValue;
+    oldValue = oldJSONvalue.getDouble("temperatura");
+    drawTemp(30,30,"Temperatura Casa", newValue, oldValue);
+  }catch(Exception e){
+    drawTemp(30,30,"Temperatura Casa", lastTC, lastTC);
+  }
   
-  arrayJSONObject = sendGetRequest("/getTempRecords/Pozo/");
-  newJSONvalue = arrayJSONObject.getJSONObject(0);
-  oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("temperatura");
-  oldValue = oldJSONvalue.getDouble("temperatura");
-  drawTemp(550,30,"Temperatura Pozo", newValue, oldValue);
+  try{
+    arrayJSONObject = sendGetRequest("/getCO2Records/");
+    newJSONvalue = arrayJSONObject.getJSONObject(0);
+    oldJSONvalue = arrayJSONObject.getJSONObject(1);
+    newValue = newJSONvalue.getDouble("nivel");
+    lastC = newValue;
+    oldValue = oldJSONvalue.getDouble("nivel");
+    drawCO2(290,30,"Nivel de CO2", newValue, oldValue);
+  }catch(Exception e){
+    drawCO2(290,30,"Nivel de CO2", lastC, lastC);
+  }
   
-  arrayJSONObject = sendGetRequest("/getLumenRecords/");
-  newJSONvalue = arrayJSONObject.getJSONObject(0);
-  oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("nivel");
-  oldValue = oldJSONvalue.getDouble("nivel");
-  drawLight(30,350,"Nivel de Luz", newValue, oldValue);
+  try{
+    arrayJSONObject = sendGetRequest("/getTempRecords/Pozo/");
+    newJSONvalue = arrayJSONObject.getJSONObject(0);
+    oldJSONvalue = arrayJSONObject.getJSONObject(1);
+    newValue = newJSONvalue.getDouble("temperatura");
+    lastTP = newValue;
+    oldValue = oldJSONvalue.getDouble("temperatura");
+    drawTemp(550,30,"Temperatura Pozo", newValue, oldValue);
+  }catch(Exception e){
+    drawTemp(550,30,"Temperatura Pozo", lastTP, lastTP);
+  }
   
-  arrayJSONObject = sendGetRequest("/getHumidityRecords/");
-  newJSONvalue = arrayJSONObject.getJSONObject(0);
-  oldJSONvalue = arrayJSONObject.getJSONObject(1);
-  newValue = newJSONvalue.getDouble("nivel");
-  oldValue = oldJSONvalue.getDouble("nivel");
-  drawHumidity(400,350,"Nivel de Humedad", newValue, oldValue);
+  try{
+    arrayJSONObject = sendGetRequest("/getLumenRecords/");
+    newJSONvalue = arrayJSONObject.getJSONObject(0);
+    oldJSONvalue = arrayJSONObject.getJSONObject(1);
+    newValue = newJSONvalue.getDouble("nivel");
+    lastL = newValue;
+    oldValue = oldJSONvalue.getDouble("nivel");
+    drawLight(30,350,"Nivel de Luz", newValue, oldValue);
+  }catch(Exception e){
+    drawLight(30,350,"Nivel de Luz", lastL, lastL);
+  }
+  
+  try{
+    arrayJSONObject = sendGetRequest("/getHumidityRecords/");
+    newJSONvalue = arrayJSONObject.getJSONObject(0);
+    oldJSONvalue = arrayJSONObject.getJSONObject(1);
+    newValue = newJSONvalue.getDouble("nivel");
+    lastH = newValue;
+    oldValue = oldJSONvalue.getDouble("nivel");
+    drawHumidity(400,350,"Nivel de Humedad", newValue, oldValue);
+  }catch(Exception e){
+    drawHumidity(400,350,"Nivel de Humedad", lastH, lastH);
+  }
   
   delay(300);
 }
@@ -249,7 +284,7 @@ void drawLight(int x, int y, String title, double new_lumen, double old_lumen){
     fill(255,255,0);
   }
   
-  ellipse(x+182,y+142,150,150);
+  ellipse(x+183,y+144,150,150);
   
   // Change Indicator
   drawLightChevron(x,y, new_lumen-old_lumen);
