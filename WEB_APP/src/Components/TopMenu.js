@@ -42,6 +42,11 @@ export default class TopMenu extends Component {
                                     Experimento 3
                                 </NavLink>
                             </NavItem>
+                            <NavItem>
+                                <NavLink href="#" onClick={() => this.props.menuHandler(4)}>
+                                    Grafica de CO₂
+                                </NavLink>
+                            </NavItem>
                         </Nav>
                     </Collapse>
                 </Navbar>

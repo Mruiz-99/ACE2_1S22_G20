@@ -6,6 +6,7 @@ import TopMenu from './Components/TopMenu';
 import Exp1 from './Components/Exp1';
 import Exp2 from './Components/Exp2';
 import Exp3 from './Components/Exp3';
+import CO2Graph from './Components/CO2Graph';
 
 export default class App extends Component {
   state = {
@@ -32,6 +33,9 @@ export default class App extends Component {
       case 3:
       // Experiment 3
         return <Exp3 />;
+      case 4:
+      // CO2 Graphic
+        return <CO2Graph />;
       default:
           return <Base />;
     }
