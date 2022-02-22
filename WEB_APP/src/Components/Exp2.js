@@ -42,7 +42,7 @@ export default class Exp2 extends Component {
             result.forEach(element => {
                 this.state.data_pozo.push({
                     x: parseFloat(element.id),
-                    y: parseFloat(element.temperatura)
+                    y: parseFloat(element.nivel)
                 });              
             });
             if(this.chart !== undefined) this.chart.render();
@@ -61,7 +61,7 @@ export default class Exp2 extends Component {
         this.getLatestValueFromAPI_Pozo().then((result) => {
             this.state.data_pozo.push({
                 x: parseFloat(result[0].id),
-                y: parseFloat(result[0].temperatura)
+                y: parseFloat(result[0].nivel)
             });              
             if(this.chart !== undefined) this.chart.render();
         });                
@@ -86,7 +86,7 @@ export default class Exp2 extends Component {
           method: 'GET',
           headers: { 'Content-Type': 'application/json'}
         };
-        const response = await fetch("/getTempRecords/Pozo/");
+        const response = await fetch("/getHumidityRecords/");
         const body = await response.json();
     
         if(response.status !== 200){
