@@ -127,7 +127,7 @@ export default class Exp2 extends Component {
         const options = {
             animationEnabled:true,
             axisY : {
-                title: "Temperatura"
+                title: "Temperatura / Humedad"
             },
             axisX : {
                 title: "Record ID"

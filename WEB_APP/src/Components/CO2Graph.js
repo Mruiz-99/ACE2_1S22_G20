@@ -104,5 +104,4 @@ export default class CO2Graph extends Component {
             <CanvasJSChart options={options} onRef={ref => this.chart = ref} />
         </div>
     }
-
 }
