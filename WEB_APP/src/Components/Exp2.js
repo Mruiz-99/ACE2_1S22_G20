@@ -42,7 +42,7 @@ export default class Exp2 extends Component {
             result.forEach(element => {
                 this.state.data_pozo.push({
                     x: parseFloat(element.id),
-                    y: parseFloat(element.nivel)
+                    y: parseFloat(element.temperatura)
                 });              
             });
             if(this.chart !== undefined) this.chart.render();
@@ -61,7 +61,7 @@ export default class Exp2 extends Component {
         this.getLatestValueFromAPI_Pozo().then((result) => {
             this.state.data_pozo.push({
                 x: parseFloat(result[0].id),
-                y: parseFloat(result[0].nivel)
+                y: parseFloat(result[0].temperatura)
             });              
             if(this.chart !== undefined) this.chart.render();
         });                
