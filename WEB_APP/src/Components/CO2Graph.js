@@ -49,11 +49,7 @@ export default class CO2Graph extends Component {
     }
     
     getLatestValueFromAPI_CO2  = async() => {
-        const requestOpions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json'}
-        };
-        const response = await fetch("/getCO2Records/");
+        const response = await fetch(`${API_SERVER}/getCO2Records/`);
         const body = await response.json();
     
         if(response.status !== 200){

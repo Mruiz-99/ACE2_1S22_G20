@@ -68,10 +68,6 @@ export default class Exp2 extends Component {
     }
 
     getLatestValueFromAPI_Casa  = async() => {
-        const requestOpions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json'}
-        };
         const response = await fetch(`${API_SERVER}/getTempRecords/Casa/`);
         const body = await response.json();
     
@@ -82,10 +78,6 @@ export default class Exp2 extends Component {
     }
 
     getLatestValueFromAPI_Pozo  = async() => {
-        const requestOpions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json'}
-        };
         const response = await fetch(`${API_SERVER}/getHumidityRecords/`);
         const body = await response.json();
     
@@ -96,11 +88,7 @@ export default class Exp2 extends Component {
     }
 
     getInitDataFromAPI_Casa = async() => {
-        const requestOpions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json'}
-        };
-        const response = await fetch(`${API_SERVER}getTempRecords/Casa/GraphInit/`);
+        const response = await fetch(`${API_SERVER}/getTempRecords/Casa/GraphInit/`);
         const body = await response.json();
     
         if(response.status !== 200){
@@ -110,10 +98,6 @@ export default class Exp2 extends Component {
     }
 
     getInitDataFromAPI_Pozo = async() => {
-        const requestOpions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json'}
-        };
         const response = await fetch(`${API_SERVER}/getHumidityRecords/GraphInit/`);
         const body = await response.json();
     
