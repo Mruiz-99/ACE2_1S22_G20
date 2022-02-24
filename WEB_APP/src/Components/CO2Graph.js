@@ -67,7 +67,7 @@ export default class CO2Graph extends Component {
           method: 'GET',
           headers: { 'Content-Type': 'application/json'}
         };
-        const response = await fetch("/getCO2Records/GraphInit/");
+        const response = await fetch(`${API_SERVER}/getCO2Records/GraphInit/`);
         const body = await response.json();
     
         if(response.status !== 200){

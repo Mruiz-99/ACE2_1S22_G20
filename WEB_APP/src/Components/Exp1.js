@@ -72,7 +72,7 @@ export default class Exp1 extends Component {
           method: 'GET',
           headers: { 'Content-Type': 'application/json'}
         };
-        const response = await fetch("/getTempRecords/Casa/");
+        const response = await fetch(`${API_SERVER}/getTempRecords/Casa/`);
         const body = await response.json();
     
         if(response.status !== 200){
@@ -86,7 +86,7 @@ export default class Exp1 extends Component {
           method: 'GET',
           headers: { 'Content-Type': 'application/json'}
         };
-        const response = await fetch("/getTempRecords/Pozo/");
+        const response = await fetch(`${API_SERVER}/getTempRecords/Pozo/`);
         const body = await response.json();
     
         if(response.status !== 200){
@@ -100,7 +100,7 @@ export default class Exp1 extends Component {
           method: 'GET',
           headers: { 'Content-Type': 'application/json'}
         };
-        const response = await fetch("/getTempRecords/Casa/GraphInit/");
+        const response = await fetch(`${API_SERVER}/getTempRecords/Casa/GraphInit/`);
         const body = await response.json();
     
         if(response.status !== 200){
@@ -114,7 +114,7 @@ export default class Exp1 extends Component {
           method: 'GET',
           headers: { 'Content-Type': 'application/json'}
         };
-        const response = await fetch("/getTempRecords/Pozo/GraphInit/");
+        const response = await fetch(`${API_SERVER}/getTempRecords/Pozo/GraphInit/`);
         const body = await response.json();
     
         if(response.status !== 200){
