@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import CanvasJSReact from '../Libs/canvasjs.react';
-var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
@@ -59,10 +58,6 @@ export default class CO2Graph extends Component {
     }
 
     getInitDataFromAPI_CO2 = async() => {
-        const requestOpions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json'}
-        };
         const response = await fetch(`${API_SERVER}/getCO2Records/GraphInit/`);
         const body = await response.json();
     

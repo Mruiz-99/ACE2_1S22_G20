@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import CanvasJSReact from '../Libs/canvasjs.react';
-var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
@@ -68,10 +67,6 @@ export default class Exp2 extends Component {
     }
 
     getLatestValueFromAPI_Casa  = async() => {
-        const requestOpions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json'}
-        };
         const response = await fetch(`${API_SERVER}/getTempRecords/Casa/`);
         const body = await response.json();
     
@@ -82,10 +77,6 @@ export default class Exp2 extends Component {
     }
 
     getLatestValueFromAPI_Lumen  = async() => {
-        const requestOpions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json'}
-        };
         const response = await fetch(`${API_SERVER}/getLumenRecords/`);
         const body = await response.json();
     
@@ -96,10 +87,6 @@ export default class Exp2 extends Component {
     }
 
     getInitDataFromAPI_Casa = async() => {
-        const requestOpions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json'}
-        };
         const response = await fetch(`${API_SERVER}/getTempRecords/Casa/GraphInit/`);
         const body = await response.json();
     
@@ -110,10 +97,6 @@ export default class Exp2 extends Component {
     }
 
     getInitDataFromAPI_Lumen = async() => {
-        const requestOpions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json'}
-        };
         const response = await fetch(`${API_SERVER}/getLumenRecords/GraphInit/`);
         const body = await response.json();
     
