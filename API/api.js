@@ -46,12 +46,22 @@ const getLumenRecordsGL = async (request, response) => {
 
 const getHumidityRecords = async (request, response) => {
     pool.query('SELECT * FROM Humedad ORDER BY timestamp DESC LIMIT 2', (error, result) => {
+        // Correcion para mostrar %
+        result.rows.forEach((item) =>{
+            item.nivel = 100-(item.nivel/10.23);
+            item.nivel = Math.round((item.nivel + Number.EPSILON)*100)/100;
+        });
         response.status(200).json(result.rows);
     });
 };
 
 const getHumidityRecordsGL = async (request, response) => {
     pool.query(`SELECT * FROM (SELECT * FROM Humedad ORDER BY timestamp DESC LIMIT ${GraphLimit}) as Records ORDER BY timestamp ASC`, (error, result) => {
+        // Correcion para mostrar %
+        result.rows.forEach((item) =>{
+            item.nivel = 100-(item.nivel/10.23);
+            item.nivel = Math.round((item.nivel + Number.EPSILON)*100)/100;
+        });
         response.status(200).json(result.rows);
     });
 };
