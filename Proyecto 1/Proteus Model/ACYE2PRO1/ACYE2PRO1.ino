@@ -1,17 +1,18 @@
+
 // Configuramos los pines del sensor Trigger y Echo
 const int PinTrig = 13;
 const int PinEcho = 12;
 
-#define S10 3
-#define S11 4
-#define S12 5
-#define S13 6
-#define sensor1Out 7
+#define S10 2
+#define S11 3
+#define S12 4
+#define S13 5
+#define sensor1Out 6
 
-#define S20 8
-#define S21 9
-#define S22 10
-#define S23 11
+#define S20 7
+#define S21 8
+#define S22 9
+#define S23 10
 #define sensor2Out 12
 
 int redFrequency1 = 0;
@@ -75,11 +76,9 @@ void loop()
   unsigned long CurrentTime = millis();//tiempo actual
   unsigned long ElapsedTime = CurrentTime - StartTime;//tiempo desde el inicio(milliseconds)
   ElapsedTime = ElapsedTime / 1000; //conversion de tiempo a segundos
-  
   humedad = analogRead(PinH); //obtenemos valor humedad tierra
   humedad = humedad * (100 / 1023); //calculamos porcentaje de humedad en la tierra en base a los valores del sensor
   humedad = 100 - humedad; //obtenemos el porcentaje adecuado
-  
   //fotodiodos rojos:
   digitalWrite(S12, LOW);
   digitalWrite(S13, LOW);
@@ -102,6 +101,7 @@ void loop()
   digitalWrite(S23, HIGH);
   blueFrequency2 = pulseIn(sensor2Out, LOW);
 
+  //enviar datos:
   //enviar datos:
   Serial.print("DISTANCE ");
   Serial.println(distancia);

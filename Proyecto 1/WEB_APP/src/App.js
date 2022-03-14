@@ -4,6 +4,7 @@ import Base from './Components/Base';
 import './App.css';
 import TopMenu from './Components/TopMenu';
 import Humedad from './Components/Humedad';
+import NivelAgua from './Components/NivelAgua';
 import Suciedad_Pre from './Components/Suciedad_Pre';
 import Suciedad_Post from './Components/Suciedad_Post';
 
@@ -31,7 +32,7 @@ export default class App extends Component {
         return <Humedad />
       case 3:
       // Cantidad de Agua TODO
-        return <Humedad />
+        return <NivelAgua />
       case 4:
       // % de suciedad despues de filtrar
       return <Suciedad_Post />
