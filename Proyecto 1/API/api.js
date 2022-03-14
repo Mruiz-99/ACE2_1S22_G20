@@ -74,7 +74,7 @@ const addDistanceRecord = async (request, response) => {
         if(error){
             response.status(400).json('Error al registrar la nueva distancia');
         }else{
-            response.status(200).json(`Se inserto ${result.rowCount} valor nuevo: ${value} cm`);
+            response.status(200).json(`Se inserto ${result.rowCount} valor nuevo de distancia: ${value} cm`);
         }        
     });
 }
@@ -108,11 +108,11 @@ const addHumidityRecord = async (request, response) => {
     let apvalue = 100-(value/10.23);
     apvalue = Math.round((apvalue + Number.EPSILON)*100)/100;
     console.log(`Insertando nuevo valor de Humedad: ${apvalue} %`);
-    pool.query(`INSERT INTO Humedad (Value) VALUES (${value})`, (error, result) => {
+    pool.query(`INSERT INTO Humidity (Value) VALUES (${value})`, (error, result) => {
         if(error){
-            response.status(400).json('Error al registrar el nuevo nivel de CO2');
+            response.status(400).json('Error al registrar el nuevo nivel de Humedad');
         }else{
-            response.status(200).json(`Se inserto ${result.rowCount} valor nuevo: ${apvalue}%`);
+            response.status(200).json(`Se inserto ${result.rowCount} valor nuevo de humedad: ${apvalue}%`);
         }        
     });
 }
