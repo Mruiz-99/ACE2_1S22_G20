@@ -38,39 +38,42 @@ $ npm run serve
 
 Para interactuar con la api se pueden realizar las siguientes peticiones post/get que devolveran informacion en formato JSON
 
-##### Agregar temperatura de la casa o el pozo: 
- **POST:** /addTempRecord/Casa/ <br/>
- **POST:** /addTempRecord/Pozo/ <br/>
+##### Agregar distancia del agua: 
+ **POST:** /addDistanceRecord/ <br/>
  Con el siguiente formato en el body
  ```json
  {
-     "temp": 10.34 
+     "value": 10.34 
  }
  ```
  
- ##### Agregar nivel de iluminacion: 
- **POST:** /addLumenRecord/ <br/>
+ ##### Agregar color del sensor antes del filtro: 
+ **POST:** /addPreFilterRecord/ <br/>
  Con el siguiente formato en el body <br/>
  ```json
  {
-     "lumens": 234 
+     "red": 234,
+     "green": 24,
+     "blue": 34
  }
  ```
  
- ##### Agregar nivel de CO2: 
- **POST:** /addCO2Record/ <br />
+ ##### Agregar color del sensor despues del filtro: 
+ **POST:** /addPostFilterRecord/ <br/>
  Con el siguiente formato en el body <br/>
  ```json
  {
-     "ppm": 23.4 
+     "red": 234,
+     "green": 24,
+     "blue": 34
  }
  ```
  
- ##### Agregar nivel de CO2: 
+ ##### Agregar nivel de Humedad: 
  **POST:** /addHumidityRecord/ <br/>
  Con el siguiente formato en el body <br/>
  ```json
  {
-     "porcentaje": 15 
+     "value": 15 
  }
  ```

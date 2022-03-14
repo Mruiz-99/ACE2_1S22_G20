@@ -34,15 +34,14 @@ $ npm run serve
 Servidor que recibe los comandos desde el COM del arduino y parsea los comandos para insertar la informacion en la DB a traves de la API
 
 Descripcion del protocolo de comunicacion serial: <br/>
-**[COMANDO]** **[VALOR]**
+**[COMANDO]** **[VALOR]** **[VALOR]** **[VALOR]**
 Donde comando puede ser: 
 ```
-LUMENS: Comando para enviar dato de iluminacion
-TEMPC: Comando para datos de temperatura de la casa
-TEMPP: Comando para datos de temperatura del pozo
+DISTANCE: Comando para enviar dato de distancia del agua
+PREFILTER: Comando para datos de color del agua antes del filtro
+POSTFILTER: Comando para datos de color del agua despues del filtro
 HUMIDITY: Comando para datos de humedad
-CO2PPM: Comando para datos de CO2 ppm
 ```
-Ejemplo: **TEMPC 28.3** | **CO2PPM 234.45**
+Ejemplo: **DISTANCE 28.3** | **PREFILTER 234 45 70**
 
 

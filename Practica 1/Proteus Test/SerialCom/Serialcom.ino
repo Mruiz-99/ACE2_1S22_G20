@@ -13,7 +13,7 @@ void setup() {
 }
 
 void loop() {
-  // Leer valores del pozo con unico sensor DHT22
+  // Leer valores del pozo con unico sensor DHT11
   float humedadPozo = dht.readHumidity();
   float tempPozo = dht.readTemperature();
 
