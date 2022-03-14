@@ -14,7 +14,7 @@ app.listen(port, () => {
 app.get('/getDistanceRecords/',api.getDistanceRecords);
 app.get('/getPrefilterRecords/',api.getPreFilterRecords);
 app.get('/getPostfilterRecords/',api.getPostFilterRecords);
-app.get('/getHumidityRecords/',api.getHumidityRecordsGL);
+app.get('/getHumidityRecords/',api.getHumidityRecords);
 
 app.get('/getDistanceRecords/GraphInit/',api.getDistanceRecordsGL);
 app.get('/getPrefilterRecords/GraphInit/',api.getPreFilterRecordsGL);

@@ -3,10 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Base from './Components/Base';
 import './App.css';
 import TopMenu from './Components/TopMenu';
-import Exp1 from './Components/Exp1';
-import Exp2 from './Components/Exp2';
-import Exp3 from './Components/Exp3';
-import CO2Graph from './Components/CO2Graph';
+import Humedad from './Components/Humedad';
+import Suciedad_Pre from './Components/Suciedad_Pre';
+import Suciedad_Post from './Components/Suciedad_Post';
 
 export default class App extends Component {
   state = {
@@ -22,20 +21,20 @@ export default class App extends Component {
   renderContent(location){
     switch(location){
       case 0:
-        // Main Menu for Experiment Select
+        // DashBoard TODO
         return <Base />;
       case 1:
-      // Experiment 1
-        return <Exp1 />;
+      // % de suciedad antes de filtrar
+        return <Suciedad_Pre />;
       case 2:
-      // Experiment 2
-        return <Exp2 />;
+      // % de humedad
+        return <Humedad />
       case 3:
-      // Experiment 3
-        return <Exp3 />;
+      // Cantidad de Agua TODO
+        return <Humedad />
       case 4:
-      // CO2 Graphic
-        return <CO2Graph />;
+      // % de suciedad despues de filtrar
+      return <Suciedad_Post />
       default:
           return <Base />;
     }

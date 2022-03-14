@@ -4,10 +4,10 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
 
-export default class CO2Graph extends Component {
+export default class Humedad extends Component {
 
     state = {
-        data_co2: []
+        data: []
     }
 
     constructor(){
@@ -26,11 +26,11 @@ export default class CO2Graph extends Component {
     }
 
     fillInitData(){
-        this.getInitDataFromAPI_CO2().then((result) => {
+        this.getInitDataFromAPI().then((result) => {
             result.forEach(element => {
-                this.state.data_co2.push({
+                this.state.data.push({
                     x: parseFloat(element.id),
-                    y: parseFloat(element.nivel)
+                    y: parseFloat(element.value)
                 });              
             });
             if(this.chart !== undefined) this.chart.render();
@@ -38,17 +38,17 @@ export default class CO2Graph extends Component {
     }
 
     updateChart() {
-        this.getLatestValueFromAPI_CO2().then((result) => {
-            this.state.data_co2.push({
+        this.getLatestValueFromAPI().then((result) => {
+            this.state.data.push({
                 x: parseFloat(result[0].id),
-                y: parseFloat(result[0].nivel)
+                y: parseFloat(result[0].value)
             });              
             if(this.chart !== undefined) this.chart.render();
         });
     }
-    
-    getLatestValueFromAPI_CO2  = async() => {
-        const response = await fetch(`${API_SERVER}/getCO2Records/`);
+
+    getLatestValueFromAPI  = async() => {
+        const response = await fetch(`${API_SERVER}/getHumidityRecords/`);
         const body = await response.json();
     
         if(response.status !== 200){
@@ -57,8 +57,8 @@ export default class CO2Graph extends Component {
         return body;
     }
 
-    getInitDataFromAPI_CO2 = async() => {
-        const response = await fetch(`${API_SERVER}/getCO2Records/GraphInit/`);
+    getInitDataFromAPI = async() => {
+        const response = await fetch(`${API_SERVER}/getHumidityRecords/GraphInit/`);
         const body = await response.json();
     
         if(response.status !== 200){
@@ -66,12 +66,12 @@ export default class CO2Graph extends Component {
         }
         return body;
     }
-
+    
     render(){
         const options = {
             animationEnabled:true,
             axisY : {
-                title: "CO₂ ppm"
+                title: "Humedad"
             },
             axisX : {
                 title: "Record ID"
@@ -80,14 +80,14 @@ export default class CO2Graph extends Component {
                 shared: true
             },
             title:{
-                text: "Niveles de CO₂"
+                text: "Humedad"
             },
             data:[
                 {
                     type: "line",
-                    name: "ppm",
+                    name: "% Humedad",
                     showLegend: true,
-                    dataPoints: this.state.data_co2
+                    dataPoints: this.state.data
                 }
             ]
         }
@@ -95,4 +95,5 @@ export default class CO2Graph extends Component {
             <CanvasJSChart options={options} onRef={ref => this.chart = ref} />
         </div>
     }
+
 }
