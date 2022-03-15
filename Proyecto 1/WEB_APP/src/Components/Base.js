@@ -15,7 +15,8 @@ const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
 const clean_water_values = [212,241,249];
 const dirty_water_values = [192,147,114];
-const Profundidad_Desde_Sensor = 1000 // en cm
+const minimum_distance_trigger = 3;
+const Profundidad_Desde_Sensor = 1000; // en cm
 const ProfundidadAnimation = 140;
 
 export default class Base extends Component {
@@ -29,7 +30,10 @@ export default class Base extends Component {
         postFilterColor: "#FFFFFF",
         postFilterPercentage: 20,
 
-        humedad: 0.0
+        humedad: 0.0,
+        last_timestamp: undefined,
+        last_distance: 0,
+        speed: 0
     }
 
     constructor(){
@@ -40,6 +44,31 @@ export default class Base extends Component {
 
     componentDidMount() {
         this.intervalID = setInterval(this.updateChart, updateInterval);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.intervalID);
+    }
+
+    getTimeDifference(timestamp1, timestamp2){
+        var difference = new Date(timestamp2).getTime() - new Date(timestamp1).getTime();
+
+        var daysDifference = Math.floor(difference/1000/60/60/24);
+        difference -= daysDifference*1000*60*60*24
+
+        var hoursDifference = Math.floor(difference/1000/60/60);
+        difference -= hoursDifference*1000*60*60
+
+        var minutesDifference = Math.floor(difference/1000/60);
+        difference -= minutesDifference*1000*60
+
+        var secondsDifference = Math.floor(difference/1000);
+
+        if(daysDifference > 0){
+            return -1
+        }
+
+        return (hoursDifference*60*60)+(minutesDifference*60)+secondsDifference;
     }
 
     componentToHex(c) {
@@ -94,12 +123,29 @@ export default class Base extends Component {
             let nivel = parseInt(result[0].value/(Profundidad_Desde_Sensor/ProfundidadAnimation));
             let distance = parseFloat(Profundidad_Desde_Sensor-result[0].value);
             console.log("Altura: ",nivel);
+
+            let new_distance = parseFloat(Profundidad_Desde_Sensor-result[0].value)
+            if(new_distance-this.state.last_distance >= minimum_distance_trigger){
+                if(this.state.last_timestamp == undefined) this.state.last_timestamp = result[0].timestamp;
+                let diff = this.getTimeDifference(this.state.last_timestamp, result[0].timestamp)
+
+                if(diff > 0){
+                    let d = new_distance-this.state.last_distance;
+                    let speed = parseFloat((d/diff).toFixed(2));
+                    
+                    this.setState({
+                        speed: speed
+                    });
+                }
+            }
+            this.state.last_timestamp = result[0].timestamp;
+            this.state.last_distance = new_distance;
+            
             this.setState({
                 distance: distance,
                 animationDistance: parseInt(nivel),
                 updateColor: !this.state.updateColor
-            });                     
-            
+            });
         });
 
         this.getLatestValueFromAPI_Humidity().then((result) => {
@@ -231,7 +277,7 @@ export default class Base extends Component {
                                             </CardSubtitle>
                                         </Col>
                                         <Col className='text-center my-auto' tag="h3">
-                                                {this.state.humedad} %
+                                                {this.state.speed} cm/s
                                         </Col>
                                         <Col className='text-right'>
                                             <img src={Filtro} width={100}/>
