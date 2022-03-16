@@ -13,10 +13,10 @@ import {
 } from 'reactstrap';
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
-const clean_water_values = [212,241,249];
-const dirty_water_values = [192,147,114];
+const clean_water_values = [65,75,55];
+const dirty_water_values = [85,115,85];
 const minimum_distance_trigger = 3;
-const Profundidad_Desde_Sensor = 1000; // en cm
+const Profundidad_Desde_Sensor = 22; // en cm
 const ProfundidadAnimation = 140;
 
 export default class Base extends Component {
@@ -85,13 +85,13 @@ export default class Base extends Component {
         .then((result) => {
             let color = this.rgbToHex(result[0].r, result[0].g, result[0].b);
             
-            let redPercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(result[0].r)-dirty_water_values[0]))
+            let redPercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].r)-clean_water_values[0]))
             if(redPercentage < 0){ redPercentage = 0 }
-            let greenPercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(result[0].g)-dirty_water_values[0]))
+            let greenPercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].g)-clean_water_values[0]))
             if(greenPercentage < 0){ greenPercentage = 0 }
-            let bluePercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(result[0].b)-dirty_water_values[0]))
+            let bluePercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].b)-clean_water_values[0]))
             if(bluePercentage < 0){ bluePercentage = 0 }
-            let overallPercentage = (redPercentage+greenPercentage+bluePercentage)/3
+            let overallPercentage = ((redPercentage+greenPercentage+bluePercentage)/3).toFixed(2);
 
             this.setState({
                 preFilterColor: color,
@@ -104,13 +104,13 @@ export default class Base extends Component {
         .then((result) => {
             let color = this.rgbToHex(result[0].r, result[0].g, result[0].b);
             
-            let redPercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(result[0].r)-dirty_water_values[0]))
+            let redPercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].r)-clean_water_values[0]))
             if(redPercentage < 0){ redPercentage = 0 }
-            let greenPercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(result[0].g)-dirty_water_values[0]))
+            let greenPercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].g)-clean_water_values[0]))
             if(greenPercentage < 0){ greenPercentage = 0 }
-            let bluePercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(result[0].b)-dirty_water_values[0]))
+            let bluePercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].b)-clean_water_values[0]))
             if(bluePercentage < 0){ bluePercentage = 0 }
-            let overallPercentage = (redPercentage+greenPercentage+bluePercentage)/3
+            let overallPercentage = ((redPercentage+greenPercentage+bluePercentage)/3).toFixed(2);
 
             this.setState({
                 postFilterColor: color,

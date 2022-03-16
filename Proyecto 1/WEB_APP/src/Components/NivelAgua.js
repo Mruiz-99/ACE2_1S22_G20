@@ -3,7 +3,7 @@ import CanvasJSReact from '../Libs/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
-const Profundidad_Desde_Sensor = 1000 // en cm
+const Profundidad_Desde_Sensor = 22 // en cm
 
 export default class NivelAgua extends Component {
 
