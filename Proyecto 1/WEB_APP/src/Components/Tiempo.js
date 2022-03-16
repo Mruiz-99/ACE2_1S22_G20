@@ -4,7 +4,7 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
 const minimum_distance_trigger = 3 // cada cuanto cm se mide la velocidad de llenado
-const Profundidad_Desde_Sensor = 1000 // en cm
+const Profundidad_Desde_Sensor = 22 // en cm
 
 export default class Tiempo extends Component {
 
