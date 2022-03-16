@@ -13,10 +13,10 @@ import {
 } from 'reactstrap';
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
-const clean_water_values = [212,241,249];
-const dirty_water_values = [192,147,114];
+const clean_water_values = [65,75,55];
+const dirty_water_values = [85,115,85];
 const minimum_distance_trigger = 3;
-const Profundidad_Desde_Sensor = 1000; // en cm
+const Profundidad_Desde_Sensor = 22; // en cm
 const ProfundidadAnimation = 140;
 
 export default class Base extends Component {

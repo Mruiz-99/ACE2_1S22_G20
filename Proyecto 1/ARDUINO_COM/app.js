@@ -5,7 +5,7 @@ const PREFILTER = "PREFILTER ";
 const POSTFILTER = "POSTFILTER ";
 const HUMIDITY = "HUMIDITY";
 
-const ARDUINO_COM ="COM2";
+const ARDUINO_COM ="COM3";
 
 const serialPort = require('serialport');
 var createInterface = require('readline').createInterface;

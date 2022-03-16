@@ -3,8 +3,8 @@ import CanvasJSReact from '../Libs/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
-const clean_water_values = [212,241,249];
-const dirty_water_values = [192,147,114];
+const clean_water_values = [65,75,55];
+const dirty_water_values = [85,115,85];
 
 export default class Suciedad_Pre extends Component {
 
