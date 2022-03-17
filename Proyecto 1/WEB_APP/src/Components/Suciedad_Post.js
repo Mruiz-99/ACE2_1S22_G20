@@ -3,8 +3,8 @@ import CanvasJSReact from '../Libs/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
-const clean_water_values = [65,75,55];
-const dirty_water_values = [85,115,85];
+const clean_water_values = [43,54,33];
+const dirty_water_values = [131,155,120];
 
 export default class Suciedad_Post extends Component {
 
@@ -30,17 +30,26 @@ export default class Suciedad_Post extends Component {
     fillInitData(){
         this.getInitDataFromAPI().then((result) => {
             result.forEach(element => {
-                let redPercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(element.r)-dirty_water_values[0]))
-                if(redPercentage < 0){ redPercentage = 0 }
-                let greenPercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(element.g)-dirty_water_values[0]))
-                if(greenPercentage < 0){ greenPercentage = 0 }
-                let bluePercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(element.b)-dirty_water_values[0]))
-                if(bluePercentage < 0){ bluePercentage = 0 }
-                let overallPercentage = (redPercentage+greenPercentage+bluePercentage)/3
+                let diffRed = dirty_water_values[0]-clean_water_values[0];
+                let diffGreen = dirty_water_values[1]-clean_water_values[1];
+                let diffBlue = dirty_water_values[2]-clean_water_values[2];
+
+                let valuePPRed = diffRed/100;
+                let valuePPGreen = diffGreen/100;
+                let valuePPBlue = diffBlue/100;
+
+                let percentageRed = 100-((element.r - clean_water_values[0])*valuePPRed);
+                let percentageGreen = 100-((element.g - clean_water_values[1])*valuePPGreen);
+                let percentageBlue = 100-((element.b - clean_water_values[2])*valuePPBlue);
+
+                let overallPercentage = ((percentageRed+percentageGreen+percentageBlue)/3).toFixed(2);
+                
+                if(overallPercentage < 0) overallPercentage = 0.0;
+                if(overallPercentage > 100) overallPercentage = 100.0;
 
                 this.state.data.push({
                     x: parseFloat(element.id),
-                    y: parseFloat(overallPercentage.toFixed(2))
+                    y: parseFloat(overallPercentage)
                 });              
             });
             if(this.chart !== undefined) this.chart.render();
@@ -49,18 +58,26 @@ export default class Suciedad_Post extends Component {
 
     updateChart() {
         this.getLatestValueFromAPI().then((result) => {
-            let redPercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(result[0].r)-dirty_water_values[0]))
-                if(redPercentage < 0){ redPercentage = 0 }
-                let greenPercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(result[0].g)-dirty_water_values[0]))
-                if(greenPercentage < 0){ greenPercentage = 0 }
-                let bluePercentage = (clean_water_values[0]-dirty_water_values[0])*(100/(parseFloat(result[0].b)-dirty_water_values[0]))
-                if(bluePercentage < 0){ bluePercentage = 0 }
-                let overallPercentage = (redPercentage+greenPercentage+bluePercentage)/3
+            let diffRed = dirty_water_values[0]-clean_water_values[0];
+            let diffGreen = dirty_water_values[1]-clean_water_values[1];
+            let diffBlue = dirty_water_values[2]-clean_water_values[2];
 
-                this.state.data.push({
-                    x: parseFloat(result[0].id),
-                    y: parseFloat(overallPercentage.toFixed(2))
-                });              
+            let valuePPRed = diffRed/100;
+            let valuePPGreen = diffGreen/100;
+            let valuePPBlue = diffBlue/100;
+
+            let percentageRed = 100-((result[0].r - clean_water_values[0])*valuePPRed);
+            let percentageGreen = 100-((result[0].g - clean_water_values[1])*valuePPGreen);
+            let percentageBlue = 100-((result[0].b - clean_water_values[2])*valuePPBlue);
+
+            let overallPercentage = ((percentageRed+percentageGreen+percentageBlue)/3).toFixed(2);
+            if(overallPercentage < 0) overallPercentage = 0.0;
+            if(overallPercentage > 100) overallPercentage = 100.0;
+
+            this.state.data.push({
+                x: parseFloat(result[0].id),
+                y: parseFloat(overallPercentage)
+            });
             if(this.chart !== undefined) this.chart.render();
         });
     }
