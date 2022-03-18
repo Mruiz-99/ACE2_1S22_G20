@@ -13,11 +13,26 @@ import {
 } from 'reactstrap';
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
-const clean_water_values = [65,75,55];
-const dirty_water_values = [85,115,85];
+
+const clean_water_values = [43,54,33];
+const dirty_water_values = [131,155,120];
 const minimum_distance_trigger = 3;
 const Profundidad_Desde_Sensor = 22; // en cm
 const ProfundidadAnimation = 140;
+
+const WaterColor = 
+[
+    "#3F2813", // <10%
+    "#404013", // <20%
+    "#2B4013", // <30%
+    "#194013", // <40%
+    "#134025", // <50%
+    "#134040", // <60%
+    "#237575", // <70%
+    "#2C7594", // <80%
+    "#3A93B9", // <90%
+    "#6EC2E6"  // <100%
+];
 
 export default class Base extends Component {
     state = {
@@ -83,38 +98,72 @@ export default class Base extends Component {
     updateChart() {
         this.getLatestValueFromAPI_PreFilter()
         .then((result) => {
-            let color = this.rgbToHex(result[0].r, result[0].g, result[0].b);
-            
-            let redPercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].r)-clean_water_values[0]))
-            if(redPercentage < 0){ redPercentage = 0 }
-            let greenPercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].g)-clean_water_values[0]))
-            if(greenPercentage < 0){ greenPercentage = 0 }
-            let bluePercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].b)-clean_water_values[0]))
-            if(bluePercentage < 0){ bluePercentage = 0 }
-            let overallPercentage = ((redPercentage+greenPercentage+bluePercentage)/3).toFixed(2);
+            let diffRed = dirty_water_values[0]-clean_water_values[0];
+            let diffGreen = dirty_water_values[1]-clean_water_values[1];
+            let diffBlue = dirty_water_values[2]-clean_water_values[2];
+
+            let valuePPRed = diffRed/100;
+            let valuePPGreen = diffGreen/100;
+            let valuePPBlue = diffBlue/100;
+
+            let percentageRed = 100-((result[0].r - clean_water_values[0])*valuePPRed);
+            let percentageGreen = 100-((result[0].g - clean_water_values[1])*valuePPGreen);
+            let percentageBlue = 100-((result[0].b - clean_water_values[2])*valuePPBlue);
+
+            let overallPercentage = ((percentageRed+percentageGreen+percentageBlue)/3).toFixed(2);
+
+            let color = "#000000";
+
+            if(overallPercentage < 0) overallPercentage = 0.0;
+            if(overallPercentage > 100) overallPercentage = 100.0;
+
+            if(overallPercentage > 0){
+                let i = parseInt(overallPercentage/10)-1
+                if(i < 0) i =0
+                color = WaterColor[i];
+            }else{
+                color = WaterColor[0];
+            }
 
             this.setState({
                 preFilterColor: color,
-                preFilterPercentage: overallPercentage,
+                preFilterPercentage: parseFloat(overallPercentage),
                 updateColor: !this.state.updateColor
             });                     
         });
 
         this.getLatestValueFromAPI_PostFilter()
         .then((result) => {
-            let color = this.rgbToHex(result[0].r, result[0].g, result[0].b);
-            
-            let redPercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].r)-clean_water_values[0]))
-            if(redPercentage < 0){ redPercentage = 0 }
-            let greenPercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].g)-clean_water_values[0]))
-            if(greenPercentage < 0){ greenPercentage = 0 }
-            let bluePercentage = (dirty_water_values[0]-clean_water_values[0])*(100/(parseFloat(result[0].b)-clean_water_values[0]))
-            if(bluePercentage < 0){ bluePercentage = 0 }
-            let overallPercentage = ((redPercentage+greenPercentage+bluePercentage)/3).toFixed(2);
+            let diffRed = dirty_water_values[0]-clean_water_values[0];
+            let diffGreen = dirty_water_values[1]-clean_water_values[1];
+            let diffBlue = dirty_water_values[2]-clean_water_values[2];
+
+            let valuePPRed = diffRed/100;
+            let valuePPGreen = diffGreen/100;
+            let valuePPBlue = diffBlue/100;
+
+            let percentageRed = 100-((result[0].r - clean_water_values[0])*valuePPRed);
+            let percentageGreen = 100-((result[0].g - clean_water_values[1])*valuePPGreen);
+            let percentageBlue = 100-((result[0].b - clean_water_values[2])*valuePPBlue);
+
+            let overallPercentage = ((percentageRed+percentageGreen+percentageBlue)/3).toFixed(2);
+
+            let color = "#000000";
+
+            if(overallPercentage < 0) overallPercentage = 0.0;
+            if(overallPercentage > 100) overallPercentage = 100.0;
+
+            if(overallPercentage > 0){
+                let i = parseInt(overallPercentage/10)-1
+                if(i < 0) i =0
+                color = WaterColor[i];
+            }else{
+                color = WaterColor[0];
+            }
 
             this.setState({
                 postFilterColor: color,
-                postFilterPercentage: overallPercentage,
+                postFilterPercentage: parseFloat(overallPercentage),
                 updateColor: !this.state.updateColor
             });                     
         });
