@@ -64,6 +64,20 @@ export default class Suciedad_Pre extends Component {
     }
 
     updateChart() {
+        this.getLatestValueFromAPI_Clean().then((result) => {
+            let displacedRed = result[0].r - clean_water_values[0];
+            let displacedGreen = result[0].g - clean_water_values[1];
+            let displacedBlue = result[0].b - clean_water_values[2];
+
+            if(displacedRed < 0) displacedRed = result[0].r;
+            if(displacedGreen < 0) displacedGreen = result[0].g;
+            if(displacedBlue < 0) displacedBlue = result[0].b;
+
+            this.state.lastDisplacemendRed = displacedRed;
+            this.state.lastDisplacemendGreen = displacedGreen;
+            this.state.lastDisplacemendBlue = displacedBlue;
+        });
+
         this.getLatestValueFromAPI().then((result) => {
             let diffRed = dirty_water_values[0]-clean_water_values[0];
             let diffGreen = dirty_water_values[1]-clean_water_values[1];
@@ -81,6 +95,10 @@ export default class Suciedad_Pre extends Component {
             if(displacedGreen < 0) displacedGreen = result[0].g;
             if(displacedBlue < 0) displacedBlue = result[0].b;
 
+            if(displacedRed < this.state.lastDisplacemendRed) displacedRed = result[0].r;
+            if(displacedGreen < this.state.lastDisplacemendGreen) displacedGreen = result[0].g;
+            if(displacedBlue < this.state.lastDisplacemendBlue) displacedBlue = result[0].b;
+
             let percentageRed = 100-(displacedRed*valuePPRed);
             let percentageGreen = 100-(displacedGreen*valuePPGreen);
             let percentageBlue = 100-(displacedBlue*valuePPBlue);
@@ -95,6 +113,16 @@ export default class Suciedad_Pre extends Component {
             });              
             if(this.chart !== undefined) this.chart.render();
         });
+    }
+
+    getLatestValueFromAPI_Clean  = async() => {
+        const response = await fetch(`${API_SERVER}/getPostFilterRecords/`);
+        const body = await response.json();
+    
+        if(response.status !== 200){
+          throw Error(body.message)
+        }
+        return body;
     }
 
     getLatestValueFromAPI  = async() => {

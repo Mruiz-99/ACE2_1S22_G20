@@ -74,9 +74,21 @@ export default class Suciedad_Post extends Component {
             let valuePPGreen = diffGreen/100;
             let valuePPBlue = diffBlue/100;
 
-            let percentageRed = 100-((result[0].r - clean_water_values[0])*valuePPRed);
-            let percentageGreen = 100-((result[0].g - clean_water_values[1])*valuePPGreen);
-            let percentageBlue = 100-((result[0].b - clean_water_values[2])*valuePPBlue);
+            let displacedRed = result[0].r - clean_water_values[0];
+            let displacedGreen = result[0].g - clean_water_values[1];
+            let displacedBlue = result[0].b - clean_water_values[2];
+
+            if(displacedRed < 0) displacedRed = result[0].r;
+            if(displacedGreen < 0) displacedGreen = result[0].g;
+            if(displacedBlue < 0) displacedBlue = result[0].b;
+
+            this.state.lastDisplacemendRed = displacedRed;
+            this.state.lastDisplacemendGreen = displacedGreen;
+            this.state.lastDisplacemendBlue = displacedBlue;
+
+            let percentageRed = 100-(displacedRed*valuePPRed);
+            let percentageGreen = 100-(displacedGreen*valuePPGreen);
+            let percentageBlue = 100-(displacedBlue*valuePPBlue);
 
             let overallPercentage = ((percentageRed+percentageGreen+percentageBlue)/3).toFixed(2);
             if(overallPercentage < 0) overallPercentage = 0.0;
