@@ -15,7 +15,7 @@ const getDistanceRecords = async (request, response) => {
 };
 
 const getDistanceRecordsGL = async (request, response) => {
-    pool.query(`SELECT * FROM (SELECT * FROM DISTANCE ORDER BY timestamp DESC LIMIT ${GraphLimit}) as Records ORDER BY timestamp ASC`, (error, result) => {
+    pool.query(`SELECT * FROM (SELECT * FROM DISTANCE ORDER BY timestamp DESC LIMIT ${GraphLimit+300}) as Records ORDER BY timestamp ASC`, (error, result) => {
         response.status(200).json(result.rows);
     });
 };
