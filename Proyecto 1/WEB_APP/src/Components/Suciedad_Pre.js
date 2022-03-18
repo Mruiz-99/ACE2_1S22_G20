@@ -38,9 +38,17 @@ export default class Suciedad_Pre extends Component {
                 let valuePPGreen = diffGreen/100;
                 let valuePPBlue = diffBlue/100;
 
-                let percentageRed = 100-((element.r - clean_water_values[0])*valuePPRed);
-                let percentageGreen = 100-((element.g - clean_water_values[1])*valuePPGreen);
-                let percentageBlue = 100-((element.b - clean_water_values[2])*valuePPBlue);
+                let displacedRed = element.r - clean_water_values[0];
+                let displacedGreen = element.g - clean_water_values[1];
+                let displacedBlue = element.b - clean_water_values[2];
+
+                if(displacedRed < 0) displacedRed = element.r;
+                if(displacedGreen < 0) displacedGreen = element.g;
+                if(displacedBlue < 0) displacedBlue = element.b;
+
+                let percentageRed = 100-(displacedRed*valuePPRed);
+                let percentageGreen = 100-(displacedGreen*valuePPGreen);
+                let percentageBlue = 100-(displacedBlue*valuePPBlue);
 
                 let overallPercentage = ((percentageRed+percentageGreen+percentageBlue)/3).toFixed(2);
                 if(overallPercentage < 0) overallPercentage = 0.0;
@@ -65,9 +73,17 @@ export default class Suciedad_Pre extends Component {
             let valuePPGreen = diffGreen/100;
             let valuePPBlue = diffBlue/100;
 
-            let percentageRed = 100-((result[0].r - clean_water_values[0])*valuePPRed);
-            let percentageGreen = 100-((result[0].g - clean_water_values[1])*valuePPGreen);
-            let percentageBlue = 100-((result[0].b - clean_water_values[2])*valuePPBlue);
+            let displacedRed = result[0].r - clean_water_values[0];
+            let displacedGreen = result[0].g - clean_water_values[1];
+            let displacedBlue = result[0].b - clean_water_values[2];
+
+            if(displacedRed < 0) displacedRed = result[0].r;
+            if(displacedGreen < 0) displacedGreen = result[0].g;
+            if(displacedBlue < 0) displacedBlue = result[0].b;
+
+            let percentageRed = 100-(displacedRed*valuePPRed);
+            let percentageGreen = 100-(displacedGreen*valuePPGreen);
+            let percentageBlue = 100-(displacedBlue*valuePPBlue);
 
             let overallPercentage = ((percentageRed+percentageGreen+percentageBlue)/3).toFixed(2);
             if(overallPercentage < 0) overallPercentage = 0.0;

@@ -13,7 +13,6 @@ import {
 } from 'reactstrap';
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
-
 const clean_water_values = [43,54,33];
 const dirty_water_values = [131,155,120];
 const minimum_distance_trigger = 3;
@@ -106,9 +105,17 @@ export default class Base extends Component {
             let valuePPGreen = diffGreen/100;
             let valuePPBlue = diffBlue/100;
 
-            let percentageRed = 100-((result[0].r - clean_water_values[0])*valuePPRed);
-            let percentageGreen = 100-((result[0].g - clean_water_values[1])*valuePPGreen);
-            let percentageBlue = 100-((result[0].b - clean_water_values[2])*valuePPBlue);
+            let displacedRed = result[0].r - clean_water_values[0];
+            let displacedGreen = result[0].g - clean_water_values[1];
+            let displacedBlue = result[0].b - clean_water_values[2];
+
+            if(displacedRed < 0) displacedRed = result[0].r;
+            if(displacedGreen < 0) displacedGreen = result[0].g;
+            if(displacedBlue < 0) displacedBlue = result[0].b;
+
+            let percentageRed = 100-(displacedRed*valuePPRed);
+            let percentageGreen = 100-(displacedGreen*valuePPGreen);
+            let percentageBlue = 100-(displacedBlue*valuePPBlue);
 
             let overallPercentage = ((percentageRed+percentageGreen+percentageBlue)/3).toFixed(2);
 
@@ -142,10 +149,18 @@ export default class Base extends Component {
             let valuePPGreen = diffGreen/100;
             let valuePPBlue = diffBlue/100;
 
-            let percentageRed = 100-((result[0].r - clean_water_values[0])*valuePPRed);
-            let percentageGreen = 100-((result[0].g - clean_water_values[1])*valuePPGreen);
-            let percentageBlue = 100-((result[0].b - clean_water_values[2])*valuePPBlue);
+            let displacedRed = result[0].r - clean_water_values[0];
+            let displacedGreen = result[0].g - clean_water_values[1];
+            let displacedBlue = result[0].b - clean_water_values[2];
 
+            if(displacedRed < 0) displacedRed = result[0].r;
+            if(displacedGreen < 0) displacedGreen = result[0].g;
+            if(displacedBlue < 0) displacedBlue = result[0].b;
+
+            let percentageRed = 100-(displacedRed*valuePPRed);
+            let percentageGreen = 100-(displacedGreen*valuePPGreen);
+            let percentageBlue = 100-(displacedBlue*valuePPBlue);
+            
             let overallPercentage = ((percentageRed+percentageGreen+percentageBlue)/3).toFixed(2);
 
             let color = "#000000";
@@ -170,9 +185,8 @@ export default class Base extends Component {
 
         this.getLatestValueFromAPI_Distance().then((result) => {
             let nivel = parseInt(result[0].value/(Profundidad_Desde_Sensor/ProfundidadAnimation));
-            let distance = parseFloat(Profundidad_Desde_Sensor-result[0].value);
-            console.log("Altura: ",nivel);
-
+            let distance = parseFloat((Profundidad_Desde_Sensor-result[0].value).toFixed(2));
+            
             let new_distance = parseFloat(Profundidad_Desde_Sensor-result[0].value)
             if(new_distance-this.state.last_distance >= minimum_distance_trigger){
                 if(this.state.last_timestamp == undefined) this.state.last_timestamp = result[0].timestamp;
