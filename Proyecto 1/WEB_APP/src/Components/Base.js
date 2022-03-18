@@ -39,6 +39,10 @@ export default class Base extends Component {
         preFilterPercentage: 20,
         updateColor: true,
 
+        lastDisplacemendRed: 0,
+        lastDisplacemendGreen: 0,
+        lastDisplacemendBlue: 0,
+
         distance: 0,
         animationDistance: 130,
         postFilterColor: "#FFFFFF",
@@ -113,6 +117,10 @@ export default class Base extends Component {
             if(displacedGreen < 0) displacedGreen = result[0].g;
             if(displacedBlue < 0) displacedBlue = result[0].b;
 
+            if(displacedRed < this.state.lastDisplacemendRed) displacedRed = result[0].r;
+            if(displacedGreen < this.state.lastDisplacemendGreen) displacedGreen = result[0].g;
+            if(displacedBlue < this.state.lastDisplacemendBlue) displacedBlue = result[0].b;
+
             let percentageRed = 100-(displacedRed*valuePPRed);
             let percentageGreen = 100-(displacedGreen*valuePPGreen);
             let percentageBlue = 100-(displacedBlue*valuePPBlue);
@@ -156,6 +164,10 @@ export default class Base extends Component {
             if(displacedRed < 0) displacedRed = result[0].r;
             if(displacedGreen < 0) displacedGreen = result[0].g;
             if(displacedBlue < 0) displacedBlue = result[0].b;
+
+            this.state.lastDisplacemendRed = displacedRed;
+            this.state.lastDisplacemendGreen = displacedGreen;
+            this.state.lastDisplacemendBlue = displacedBlue;
 
             let percentageRed = 100-(displacedRed*valuePPRed);
             let percentageGreen = 100-(displacedGreen*valuePPGreen);
