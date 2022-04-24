@@ -57,7 +57,7 @@ void loop() {
   // C => Activar generador de chispa
   // D => Detener generador de chispa
   
-  while(Serial.available() > 0) {
+  if(Serial.available() > 0) {
     char command = Serial.read(); 
     if(command == 'L'){
       Llave = true;
