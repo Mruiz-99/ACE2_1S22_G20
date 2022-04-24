@@ -5,7 +5,7 @@ Para instalar PostgreSQL puede hacer desde [aqui](https://www.enterprisedb.com/d
 
 Una vez instalado debe crearse un usuario y una base de datos con la siguiente informacion:
 
-Se debe crear una DB con el nombre **Jardin** y las credenciales de accesso: 
+Se debe crear una DB con el nombre **Estufa** y las credenciales de accesso: 
 Usuario: **pozoapi**, Password: **ArquiApi**
 
 Estos valores no son obligatorios pero si se eligen otros deben modificarse en los otros modulos para que funcione correctamente
