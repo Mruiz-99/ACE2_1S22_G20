@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">EstufaDroid</string>
+    <string name="settings_saved_prompt">API host actualizado</string>
+</resources>

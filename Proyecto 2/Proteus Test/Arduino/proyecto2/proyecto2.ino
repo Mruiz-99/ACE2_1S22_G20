@@ -1,9 +1,25 @@
+// Temporales para pruebas, cambiarlas o quitarlas de ser necesario
+#include <DHT.h>
+#include <DHT_U.h>
+#define DHTPIN 2
+#define DHTTYPE DHT11
+int TEMPPIN = A0;
+// Fin de Temporales
+
 bool Llave = false; // Falso = cerrada
 bool Chispa = false; // Falso = inactiva
+
+// Temporal 
+DHT dht(DHTPIN,DHTTYPE);
+// Fin Temporal
 
 void setup() {
   // Serial se usara para la comunicacion bt
   Serial.begin(9600);
+
+  //Temporal
+  dht.begin();
+  // Fin Temporal
 
   
 }
@@ -13,7 +29,9 @@ void loop() {
   /* Leer valor de los sensores */
   // Codigo que lee los valores de los sensores
   // Temperatura y Metano
-
+    /* Codigo temporal para pruebas */
+    float temp = dht.readTemperature();
+    float met = analogRead(TEMPPIN)*5*100/1024;
   
   /* Envia valores por bluetooth */
   
@@ -23,6 +41,13 @@ void loop() {
   // TEMP 123.5
   // METANO 145.67
   // User Serial.println() para que se envia linea por linea    
+  Serial.print("TEMP ");
+  Serial.println(temp);
+
+  delay(100);
+  
+  Serial.print("METANO ");
+  Serial.println(met);
 
   /* Leer comandos recibidos por bluetooth */
   // Por Simplicidad cada comando sera solo una letra/char
@@ -32,7 +57,7 @@ void loop() {
   // C => Activar generador de chispa
   // D => Detener generador de chispa
   
-  if(Serial.available() > 0) {
+  while(Serial.available() > 0) {
     char command = Serial.read(); 
     if(command == 'L'){
       Llave = true;
@@ -48,4 +73,6 @@ void loop() {
       // Codigo que apaga la chispa
     }
   }
+
+  delay(800);
 }

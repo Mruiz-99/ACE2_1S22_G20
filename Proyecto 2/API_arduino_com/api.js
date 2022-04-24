@@ -32,19 +32,62 @@ const getMethaneRecordsGL = async (request, response) => {
     });
 };
 
+const addTempRecord = async (value) => {
+    console.log(`Insertando nuevo valor de temperatura: ${value} °C `);
+    pool.query(`INSERT INTO TEMPERATURE (value) VALUES (${value})`, (error, result) => {
+        if(error){
+            console.log('Error al registrar la nueva temperatura');
+        }else{
+            console.log(`Se inserto ${result.rowCount} valor nuevo de temperatura: ${value} °C`);
+        }        
+    });
+}
 
+const addMethaneRecord = async (value) => {
+    console.log(`Insertando nuevo valor de gas metano: ${value} `);
+    pool.query(`INSERT INTO METHANE (value) VALUES (${value})`, (error, result) => {
+        if(error){
+            console.log('Error al registrar el nuevo valor de metano');
+        }else{
+            console.log(`Se inserto ${result.rowCount} valor nuevo de metano: ${value}`);
+        }        
+    });
+}
+
+const getStatus = async (request, response) => {
+    pool.query('SELECT * FROM STATUS LIMIT 1', (error, result) => {
+        response.status(200).json(result.rows);
+    });
+}
+
+const updateSpark = async (value, response) => {
+    pool.query(`UPDATE STATUS SET SPARK = ${String(value)} WHERE ID = 1;`, (error, _) => {
+        if(error){
+            response.status(200).json({result: 'Err'});
+        }else{
+            response.status(200).json({result: 'Ok'});
+        }
+    });
+}
+
+const updateValve = async (value, response) => {
+    pool.query(`UPDATE STATUS SET VALVE = ${String(value)} WHERE ID = 1;`, (error, _) => {
+        if(error){
+            response.status(200).json({result: 'Err'});
+        }else{
+            response.status(200).json({result: 'Ok'});
+        }
+    });
+}
 
 module.exports = {
-    getDistanceRecords,
-    getDistanceRecordsGL,
-    getPreFilterRecords,
-    getPreFilterRecordsGL,
-    getPostFilterRecords,
-    getPostFilterRecordsGL,
-    getHumidityRecords,
-    getHumidityRecordsGL,
-    addDistanceRecord,
-    addPreFilterRecord,
-    addPostFilterRecord,
-    addHumidityRecord
+    getTempRecords,
+    getTempRecordsGL,
+    getMethaneRecords,
+    getMethaneRecordsGL,
+    addTempRecord,
+    addMethaneRecord,
+    getStatus,
+    updateSpark,
+    updateValve
 };
