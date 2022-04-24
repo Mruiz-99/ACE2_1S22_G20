@@ -1,0 +1,17 @@
+{
+  "name": "api_arduino_com",
+  "version": "1.0.0",
+  "description": "API and middleware between arduino",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "serve": "node index.js"
+  },
+  "author": "Steven Jocol",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.15",
+    "pg": "^8.7.3",
+    "serialport": "^10.4.0"
+  }
+}

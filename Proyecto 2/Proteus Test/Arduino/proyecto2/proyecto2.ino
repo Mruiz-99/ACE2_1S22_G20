@@ -26,29 +26,26 @@ void loop() {
 
   /* Leer comandos recibidos por bluetooth */
   // Por Simplicidad cada comando sera solo una letra/char
-  // L => abrir/cerrar Llave de paso
-  // C => generar chispa -> 
+  // L => Abrir llave de paso
+  // M => Cerrar llave de paso
+  
+  // C => Activar generador de chispa
+  // D => Detener generador de chispa
   
   if(Serial.available() > 0) {
     char command = Serial.read(); 
     if(command == 'L'){
-      Llave = !Llave;
-      // Codigo que abre o cierra la llave de paso
-      
-      if(Llave){
-        // Llave esta abierta, hay que cerrarla
-      }else{
-        // Llave esta cerrada, hay que abrirla
-      }
+      Llave = true;
+      // Codigo que abre la llave de paso
+    }else if(command == 'M'){
+      Llave = false;
+      // Codigo que cierra la llave de paso
     }else if(command == 'C'){
-      Chispa = !Chispa;
+      Chispa = true;
       // Codigo que enciende la chispa
-      
-      if(Chispa){
-        // Codigo que detiene la chispa
-      }else{
-        // Codigo que activa la chispa
-      }
+    }else if(command == 'D'){
+      Chispa = false;
+      // Codigo que apaga la chispa
     }
   }
 }
