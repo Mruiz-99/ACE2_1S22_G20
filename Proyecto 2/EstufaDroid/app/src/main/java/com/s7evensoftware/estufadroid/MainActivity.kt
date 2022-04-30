@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //binding = ActivityMainBinding.inflate(layoutInflater)
         binding = ActivityMainBinding.inflate(layoutInflater)
         prepareViews()
         setContentView(binding.root)
