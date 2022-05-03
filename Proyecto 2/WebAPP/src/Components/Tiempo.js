@@ -1,5 +1,11 @@
+import axios from 'axios';
 import React, {Component} from 'react';
 import CanvasJSReact from '../Libs/canvasjs.react';
+import DatePicker from 'react-datepicker';
+import {
+    Row,
+    Col
+} from 'reactstrap';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
@@ -9,9 +15,9 @@ const Profundidad_Desde_Sensor = 22 // en cm
 export default class Tiempo extends Component {
 
     state = {
-        data: [],
-        last_timestamp: undefined,
-        last_distance: 0
+        startDate: new Date(),
+        endDate: new Date(),
+        data: []
     }
 
     constructor(){
@@ -32,24 +38,24 @@ export default class Tiempo extends Component {
     fillInitData(){
         return this.getInitDataFromAPI().then((result) => {
             result.forEach(element => {
-                let new_distance = parseFloat(Profundidad_Desde_Sensor-element.value)
-                if(new_distance-this.state.last_distance >= minimum_distance_trigger){
-                    if(this.state.last_timestamp == undefined) this.state.last_timestamp = element.timestamp;
-                    let diff = this.getTimeDifference(this.state.last_timestamp, element.timestamp)
-                    
-                    if(diff > 0){
-                        let d = new_distance-this.state.last_distance;
-                        let speed = parseFloat((d/diff).toFixed(2));
 
-                        this.state.data.push({
-                            x: parseFloat(element.id),
-                            y: speed
-                        });
-                    }
+                if(element.valve === true && !this.state.last_status){
+                    this.state.last_status = true;
+                    this.state.last_on = element.timestamp;
                 }
+                
+                if(element.valve === false && this.state.last_status){
+                    this.state.last_status = undefined;
+                    var difference = new Date(element.timestamp).getTime() - new Date(this.state.last_on).getTime();
+                    var resultInMinutes = Math.round(difference / 60000);
+                    
+                    this.state.data.push({
+                        x: element.id,
+                        y: parseFloat(resultInMinutes)
+                    });
 
-                this.state.last_timestamp = element.timestamp;
-                this.state.last_distance = new_distance;
+                    this.state.last_on = element.timestamp;
+                }
             });
             if(this.chart !== undefined) this.chart.render();
         });
@@ -78,39 +84,30 @@ export default class Tiempo extends Component {
 
     updateChart() {
         this.getLatestValueFromAPI().then((result) => {
-            console.log("Adding new value: ",result[0].value);
-            let new_distance = parseFloat(Profundidad_Desde_Sensor-result[0].value)
-            if(new_distance-this.state.last_distance >= minimum_distance_trigger){
-                if(this.state.last_timestamp == undefined) this.state.last_timestamp = result[0].timestamp;
-                let diff = this.getTimeDifference(this.state.last_timestamp, result[0].timestamp)
 
-                if(diff > 0){
-                    let d = new_distance-this.state.last_distance;
-                    let speed = parseFloat((d/diff).toFixed(2));
-                    
-                    this.state.last_speed = speed;
-                    this.state.last_id = result[0].id
-
-                    this.state.data.push({
-                        x: parseFloat(result[0].id),
-                        y: speed
-                    });
-                }else{
-                    this.state.data.push({
-                        x: parseFloat(result[0].id),
-                        y: this.state.last_speed
-                    });
-                }
+            if(result[0].valve === true && !this.state.last_status){
+                this.state.last_status = true;
+                this.state.last_on = result[0].timestamp;
             }
-            this.state.last_timestamp = result[0].timestamp;
-            this.state.last_distance = new_distance;
+            
+            if(result[0].valve === false && this.state.last_status){
+                this.state.last_status = undefined;
+                var difference = new Date(result[0].timestamp).getTime() - new Date(this.state.last_on).getTime();
+                var resultInMinutes = Math.round(difference / 60000);
+                
+                this.state.data.push({
+                    x: result[0].id,
+                    y: parseFloat(resultInMinutes)
+                });
 
+                this.state.last_on = result[0].timestamp;
+            }
             if(this.chart !== undefined) this.chart.render();
         });
     }
 
     getLatestValueFromAPI  = async() => {
-        const response = await fetch(`${API_SERVER}/getDistanceRecords/`);
+        const response = await fetch(`${API_SERVER}/getStatusRecords/`);
         const body = await response.json();
     
         if(response.status !== 200){
@@ -120,7 +117,7 @@ export default class Tiempo extends Component {
     }
 
     getInitDataFromAPI = async() => {
-        const response = await fetch(`${API_SERVER}/getDistanceRecords/GraphInit/`);
+        const response = await fetch(`${API_SERVER}/getStatusRecords/GraphInit/`);
         const body = await response.json();
     
         if(response.status !== 200){
@@ -128,12 +125,68 @@ export default class Tiempo extends Component {
         }
         return body;
     }
+
+    getInitDataFromAPI_Range = async(start, end) => {
+        const response = await axios.post(`${API_SERVER}/getStatusRecords/GraphInit/`, {
+            start: start,
+            end: end
+        });
+
+        const result = response.data;
+        this.state.data = [];
+
+        result.forEach(element => {
+
+            if(element.valve === true && !this.state.last_status){
+                this.state.last_status = true;
+                this.state.last_on = element.timestamp;
+            }
+            
+            if(element.valve === false && this.state.last_status){
+                this.state.last_status = undefined;
+                var difference = new Date(element.timestamp).getTime() - new Date(this.state.last_on).getTime();
+                var resultInMinutes = Math.round(difference / 60000);
+                
+                this.state.data.push({
+                    x: element.id,
+                    y: parseFloat(resultInMinutes)
+                });
+
+                this.state.last_on = element.timestamp;
+            }
+        });
+
+        this.setState({
+            data: this.state.data
+        });
+        
+        if(this.chart !== undefined) this.chart.render();
+    }
+
+    setDateStart = (date) => {
+        this.setState({
+            startDate: date
+        });
+
+        clearInterval(this.intervalID);
+
+        this.getInitDataFromAPI_Range(date, this.state.endDate);
+    }
+
+    setDateEnd = (date) => {
+        this.setState({
+            endDate: date
+        });
+
+        clearInterval(this.intervalID);
+        this.getInitDataFromAPI_Range(this.state.startDate, date);
+    }
     
     render(){
         const options = {
             animationEnabled:true,
             axisY : {
-                title: "Velocidad"
+                title: "Minutos"
             },
             axisX : {
                 title: "Record ID"
@@ -142,18 +195,29 @@ export default class Tiempo extends Component {
                 shared: true
             },
             title:{
-                text: "Tiempo de Llenado"
+                text: "Tiempo de Uso"
             },
             data:[
                 {
                     type: "line",
-                    name: "cm/s",
+                    name: " min",
                     showLegend: true,
                     dataPoints: this.state.data
                 }
             ]
         }
         return <div>
+            <div>
+                <Row className='px-3'>
+                    <Col>
+                        Desde: <DatePicker selected={this.state.startDate} onChange={(date) => this.setDateStart(date)} />
+                    </Col>
+
+                    <Col>
+                        Hasta: <DatePicker selected={this.state.endDate} onChange={(date) => this.setDateEnd(date)} />
+                    </Col>
+                </Row>
+            </div>
             <CanvasJSChart options={options} onRef={ref => this.chart = ref} />
         </div>
     }

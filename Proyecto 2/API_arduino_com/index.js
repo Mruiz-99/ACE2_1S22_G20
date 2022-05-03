@@ -5,6 +5,9 @@ const app = express();
 const api = require('./api');
 const port = 7000;
 
+let lastValve = false;
+let lastSpark = false;
+
 // COM attached to bluetooth
 const ARDUINO_COM ="COM1";
 
@@ -50,18 +53,19 @@ lineReader.on('line', (line) => {
 const setSparkStatus = async (request, response) => {
     const { value } = request.body;
     
+    lastSpark = value;
     if(value){
         console.log(`Enviando comando para encender chispa`);
         const result = await sendCommand('C');
         if(result){
-            api.updateSpark('true', response);
+            api.updateSpark('true', lastValve, response);
         }else{
             response.status(200).json({result: 'Command Error'});
         }
     }else{
         console.log(`Enviando comando para apagar chispa`);
         if(sendCommand('D')){
-            api.updateSpark('false', response);
+            api.updateSpark('false', lastValve, response);
         }else{
             response.status(200).json({result: 'Command Error'});
         }
@@ -71,12 +75,13 @@ const setSparkStatus = async (request, response) => {
 const setValveStatus = async (request, response) => {
     const { value } = request.body;
     
+    lastValve = value;
     if(value){
         console.log(`Enviando comando para abrir llave`);
         const result = await sendCommand('L');
 
         if(sendCommand('L')){
-            api.updateValve('true',response);
+            api.updateValve('true', lastSpark,response);
         }else{
             response.status(200).json({result: 'Command Error'});
         }
@@ -84,7 +89,7 @@ const setValveStatus = async (request, response) => {
         console.log(`Enviando comando para cerrar llave`);
         const result = await sendCommand('M');
         if(result){
-            api.updateValve('false',response);
+            api.updateValve('false', lastSpark,response);
         }else{
             response.status(200).json({result: 'Command Error'});
         }
@@ -101,9 +106,15 @@ app.listen(port, () => {
 // Set Entry Points
 app.get('/getStatus/', api.getStatus);
 app.get('/getTempRecords/', api.getTempRecords);
+app.get('/getStatusRecords/', api.getStatusRecords);
 app.get('/getMethaneRecords/', api.getMethaneRecords);
 app.get('/getTempRecords/GraphInit/', api.getTempRecordsGL);
 app.get('/getMethaneRecords/GraphInit/', api.getMethaneRecordsGL);
+app.get('/getStatusRecords/GraphInit/', api.getStatusRecordsGL);
+
+app.post('/getTempRecords/GraphInit/', api.getTempRecordsGLR);
+app.post('/getMethaneRecords/GraphInit/', api.getMethaneRecordsGLR);
+app.post('/getStatusRecords/GraphInit/', api.getStatusTempRecordsGLR);
 
 app.post('/setSpark/', setSparkStatus);
 app.post('/setValve/', setValveStatus);

@@ -3,10 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Base from './Components/Base';
 import './App.css';
 import TopMenu from './Components/TopMenu';
-import Humedad from './Components/Humedad';
-import NivelAgua from './Components/NivelAgua';
-import Suciedad_Pre from './Components/Suciedad_Pre';
-import Suciedad_Post from './Components/Suciedad_Post';
+import Metano from './Components/Metano';
+import Temperatura from './Components/Temperatura';
+import TiempoMetano from './Components/TiempoMetano';
 import Tiempo from './Components/Tiempo';
 
 export default class App extends Component {
@@ -24,20 +23,16 @@ export default class App extends Component {
     switch(location){
       case 0:
         // DashBoard TODO
-        return <Base />;
+        return <img style={{display: 'block',margin: 'auto'}} src="https://upload.wikimedia.org/wikipedia/commons/5/55/Biodigestor.JPG" />;
       case 1:
-      // % de suciedad antes de filtrar
-        return <Suciedad_Pre />;
+        return <Metano />;
       case 2:
-      // % de humedad
-        return <Humedad />
+        return <Temperatura />
       case 3:
       // Cantidad de Agua TODO
-        return <NivelAgua />
+        return <TiempoMetano />
       case 4:
       // % de suciedad despues de filtrar
-        return <Suciedad_Post />
-      case 5:
         return <Tiempo />
       default:
           return <Base />;

@@ -22,34 +22,29 @@ export default class TopMenu extends Component {
         return <Row>
                 <Navbar className="m-4" color="light" light expand="xs">
                     <NavbarBrand href="#" onClick={() => this.props.menuHandler(0)}>
-                    Prototipo: <br className='d-sm-none d-md-block'/> Jardin Filtrante
+                    Prototipo: <br className='d-sm-none d-md-block'/> Smart Stove
                     </NavbarBrand>
                     <Col xs={0} sm={1} md={2} lg={5}></Col>
                     <Collapse navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
                                 <NavLink href="#" onClick={() => this.props.menuHandler(1)}>
-                                    Suciedad (Pre)
+                                    Cant. Metano
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink href="#" onClick={() => this.props.menuHandler(2)}>
-                                    Humedad
+                                    Temperatura
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink href="#" onClick={() => this.props.menuHandler(3)}>
-                                    Cantidad de Agua
+                                    Temp. vs Metano
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink href="#" onClick={() => this.props.menuHandler(4)}>
-                                    Suciedad (Post)
-                                </NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="#" onClick={() => this.props.menuHandler(5)}>
-                                    Tiempo de Filtrado
+                                    Tiempo de Uso
                                 </NavLink>
                             </NavItem>
                         </Nav>

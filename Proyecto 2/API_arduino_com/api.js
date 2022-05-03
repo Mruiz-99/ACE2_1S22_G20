@@ -20,6 +20,13 @@ const getTempRecordsGL = async (request, response) => {
     });
 };
 
+const getTempRecordsGLR = async (request, response) => {
+    const { start, end } = request.body;
+    pool.query(`SELECT * FROM (SELECT * FROM TEMPERATURE WHERE TIMESTAMP >= '${start}' AND TIMESTAMP <= '${end}' ORDER BY timestamp DESC) as Records ORDER BY timestamp ASC`, (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
 const getMethaneRecords = async (request, response) => {
     pool.query('SELECT * FROM METHANE ORDER BY timestamp DESC LIMIT 2', (error, result) => {
         response.status(200).json(result.rows);
@@ -28,6 +35,32 @@ const getMethaneRecords = async (request, response) => {
 
 const getMethaneRecordsGL = async (request, response) => {
     pool.query(`SELECT * FROM (SELECT * FROM METHANE ORDER BY timestamp DESC LIMIT ${GraphLimit+300}) as Records ORDER BY timestamp ASC`, (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
+const getMethaneRecordsGLR = async (request, response) => {
+    const { start, end } = request.body;
+    pool.query(`SELECT * FROM (SELECT * FROM METHANE WHERE TIMESTAMP >= '${start}' AND TIMESTAMP <= '${end}' ORDER BY timestamp DESC) as Records ORDER BY timestamp ASC`, (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
+const getStatusRecords = async (request, response) => {
+    pool.query('SELECT * FROM STATUS ORDER BY timestamp DESC LIMIT 2', (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
+const getStatusRecordsGL = async (request, response) => {
+    pool.query(`SELECT * FROM (SELECT * FROM STATUS ORDER BY timestamp DESC LIMIT ${GraphLimit+300}) as Records ORDER BY timestamp ASC`, (error, result) => {
+        response.status(200).json(result.rows);
+    });
+};
+
+const getStatusTempRecordsGLR = async (request, response) => {
+    const { start, end } = request.body;
+    pool.query(`SELECT * FROM (SELECT * FROM STATUS WHERE TIMESTAMP >= '${start}' AND TIMESTAMP <= '${end}' ORDER BY timestamp DESC) as Records ORDER BY timestamp ASC`, (error, result) => {
         response.status(200).json(result.rows);
     });
 };
@@ -55,13 +88,13 @@ const addMethaneRecord = async (value) => {
 }
 
 const getStatus = async (request, response) => {
-    pool.query('SELECT * FROM STATUS LIMIT 1', (error, result) => {
+    pool.query('SELECT * FROM STATUS ORDER BY TIMESTAMP DESC LIMIT 1', (error, result) => {
         response.status(200).json(result.rows);
     });
 }
 
-const updateSpark = async (value, response) => {
-    pool.query(`UPDATE STATUS SET SPARK = ${String(value)} WHERE ID = 1;`, (error, _) => {
+const updateSpark = async (value, vvalue, response) => {
+    pool.query(`INSERT INTO STATUS (valve, spark) VALUES (${String(vvalue)}, ${String(value)});`, (error, _) => {
         if(error){
             response.status(200).json({result: 'Err'});
         }else{
@@ -70,8 +103,8 @@ const updateSpark = async (value, response) => {
     });
 }
 
-const updateValve = async (value, response) => {
-    pool.query(`UPDATE STATUS SET VALVE = ${String(value)} WHERE ID = 1;`, (error, _) => {
+const updateValve = async (value, svalue, response) => {
+    pool.query(`INSERT INTO STATUS (valve, spark) VALUES (${String(value)}, ${String(svalue)});`, (error, _) => {
         if(error){
             response.status(200).json({result: 'Err'});
         }else{
@@ -83,8 +116,13 @@ const updateValve = async (value, response) => {
 module.exports = {
     getTempRecords,
     getTempRecordsGL,
+    getTempRecordsGLR,
     getMethaneRecords,
     getMethaneRecordsGL,
+    getMethaneRecordsGLR,
+    getStatusRecords,
+    getStatusRecordsGL,
+    getStatusTempRecordsGLR,
     addTempRecord,
     addMethaneRecord,
     getStatus,

@@ -1,13 +1,22 @@
-import React, {Component} from 'react';
+import axios from 'axios';
+import React, {Component, useState, useRef} from 'react';
 import CanvasJSReact from '../Libs/canvasjs.react';
+import DatePicker from 'react-datepicker';
+import {
+    Row,
+    Col
+} from 'reactstrap';
+import 'react-datepicker/dist/react-datepicker.css';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const API_SERVER = "http://localhost:7000";
 var updateInterval = 500;
 
-export default class Humedad extends Component {
+export default class Temperatura extends Component {
 
     state = {
-        data: []
+        data: [],
+        startDate: new Date(),
+        endDate: new Date()
     }
 
     constructor(){
@@ -48,7 +57,7 @@ export default class Humedad extends Component {
     }
 
     getLatestValueFromAPI  = async() => {
-        const response = await fetch(`${API_SERVER}/getHumidityRecords/`);
+        const response = await fetch(`${API_SERVER}/getTempRecords/`);
         const body = await response.json();
     
         if(response.status !== 200){
@@ -58,7 +67,7 @@ export default class Humedad extends Component {
     }
 
     getInitDataFromAPI = async() => {
-        const response = await fetch(`${API_SERVER}/getHumidityRecords/GraphInit/`);
+        const response = await fetch(`${API_SERVER}/getTempRecords/GraphInit/`);
         const body = await response.json();
     
         if(response.status !== 200){
@@ -66,12 +75,51 @@ export default class Humedad extends Component {
         }
         return body;
     }
+
+    getInitDataFromAPI_Range = async(start, end) => {
+        const response = await axios.post(`${API_SERVER}/getTempRecords/GraphInit/`, {
+            start: start,
+            end: end
+        });
+
+        const result = response.data;
+        let nD = [];
+        result.forEach(element => {
+            nD.push({
+                x: parseFloat(element.id),
+                y: parseFloat(element.value)
+            });              
+        });
+
+        this.setState({
+            data: nD
+        });
+    }
+
+    setDateStart = (date) => {
+        this.setState({
+            startDate: date
+        });
+
+        clearInterval(this.intervalID);
+
+        this.getInitDataFromAPI_Range(date, this.state.endDate);
+    }
+
+    setDateEnd = (date) => {
+        this.setState({
+            endDate: date
+        });
+
+        clearInterval(this.intervalID);
+        this.getInitDataFromAPI_Range(this.state.startDate, date);
+    }
     
     render(){
         const options = {
             animationEnabled:true,
             axisY : {
-                title: "Humedad"
+                title: "Temperatura"
             },
             axisX : {
                 title: "Record ID"
@@ -80,18 +128,30 @@ export default class Humedad extends Component {
                 shared: true
             },
             title:{
-                text: "Humedad"
+                text: "Temperatura"
             },
             data:[
                 {
                     type: "line",
-                    name: "% Humedad",
+                    name: " grados",
                     showLegend: true,
                     dataPoints: this.state.data
                 }
             ]
         }
         return <div>
+            <div>
+                <Row className='px-3'>
+                    <Col>
+                        Desde: <DatePicker selected={this.state.startDate} onChange={(date) => this.setDateStart(date)} />
+                    </Col>
+
+                    <Col>
+                        Hasta: <DatePicker selected={this.state.endDate} onChange={(date) => this.setDateEnd(date)} />
+                    </Col>
+                </Row>
+            </div>
+            <br/>
             <CanvasJSChart options={options} onRef={ref => this.chart = ref} />
         </div>
     }
