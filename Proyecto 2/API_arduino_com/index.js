@@ -9,7 +9,8 @@ let lastValve = false;
 let lastSpark = false;
 
 // COM attached to bluetooth
-const ARDUINO_COM ="COM1";
+const ARDUINO_COM_IN ="COM5"; // Bluetooth
+const ARDUINO_COM_OUT ="COM3"; // COM de conexion en cable
 
 // Command Constants
 const TEMPERATURE = "TEMP";
@@ -17,14 +18,15 @@ const METHANE = "METANO";
 
 const serialPort = require('serialport');
 var createInterface = require('readline').createInterface;
-var arduino = new serialPort(ARDUINO_COM, {baudRate: 9600});
+var arduino_in = new serialPort(ARDUINO_COM_IN, {baudRate: 9600});
+var arduino_out = new serialPort(ARDUINO_COM_OUT, {baudRate: 9600});
 
 var lineReader = createInterface({
-    input: arduino
+    input: arduino_in
 });
 
 async function sendCommand(command){
-    return arduino.write(command, function (err){
+    return arduino_out.write(command, function (err){
         if(err){
             return false;
         }else{
