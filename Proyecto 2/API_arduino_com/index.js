@@ -9,7 +9,7 @@ let lastValve = false;
 let lastSpark = false;
 
 // COM attached to bluetooth
-const ARDUINO_COM_IN ="COM5"; // Bluetooth
+const ARDUINO_COM_IN ="COM4"; // Bluetooth
 const ARDUINO_COM_OUT ="COM3"; // COM de conexion en cable
 
 // Command Constants
